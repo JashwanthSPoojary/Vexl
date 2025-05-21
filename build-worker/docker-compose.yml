@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis
+    container_name: redis-server
+
+  build-worker:
+    build: .
+    container_name: build-worker
+    env_file:
+      - .env
+    depends_on:
+      - redis
