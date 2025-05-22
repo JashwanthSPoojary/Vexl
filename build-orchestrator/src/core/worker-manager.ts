@@ -2,7 +2,7 @@ import Docker from 'dockerode'
 import { BuildPayload } from '../types/types';
 export class WorkerManager {
     private docker = new Docker();
-    async triggerBuild(build_id:string,payload:BuildPayload){
+    async spawnWorker(build_id:string,payload:BuildPayload){
         await this.docker.run(
             'build-worker',
             [],
@@ -17,7 +17,11 @@ export class WorkerManager {
                 ],
                 HostConfig:{
                     AutoRemove:true,
-                    Memory:2 * 1024 * 1024 * 1024
+                    Memory:2 * 1024 * 1024 * 1024,
+                    Mounts:[{
+                        Type:'bind',
+                        Source:''
+                    }]
                 }
             },
         )

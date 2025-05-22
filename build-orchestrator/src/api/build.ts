@@ -8,7 +8,7 @@ const worker_manager = new WorkerManager();
 
 router.post('/builds',async(req,res)=>{
     const build_id = generateId();
-    await worker_manager.triggerBuild(build_id,req.body);
+    await worker_manager.spawnWorker(build_id,req.body);
     res.json({ build_id });
 });
 
