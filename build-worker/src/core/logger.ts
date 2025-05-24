@@ -6,10 +6,11 @@ export class Logger {
     const entry = JSON.stringify({
       timestamp: new Date().toISOString(),
       level,
-      buildId: this.build_id,
+      build_id: this.build_id,
+      project_id:this.project_id,
       message,
     });
-    await redis.xadd(`logs:${this.project_id}`, "*", "entry", entry);
+    await redis.xadd(`logs:${this.build_id}`, "*", "entry", entry);
   }
   async log(message: string) {
     console.log(`[INFO] ${message}`);

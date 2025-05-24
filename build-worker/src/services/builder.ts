@@ -14,7 +14,7 @@ export class Builder {
     envs: Record<string, string>
   ) {
     const project = new Project(project_id);
-    const logger = new Logger(project_id, build_id);
+    const logger = new Logger(project_id,build_id);
     try {
       logger.log(`Cloning repository: ${repo_url}`);
       await this.git.gitClone(repo_url, project);
