@@ -1,5 +1,5 @@
 {
-  "name": "build-orchestrator-last-v",
+  "name": "build-orchestrator",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,14 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/dockerode": "^3.3.39",
+    "@types/express": "^5.0.2",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bullmq": "^5.53.0",
+    "dockerode": "^4.0.6",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0"
   }
 }
