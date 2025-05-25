@@ -13,7 +13,6 @@ export class WorkerManager {
           `PROJECT_ID=${payload.project_id}`,
           `REPO_URL=${payload.repo_url}`,
           `ENVS_JSON=${JSON.stringify(payload.envs) || '{}'}`,
-          `REDIS_URL=${process.env.REDIS_URL}`,
         ],
         HostConfig: {
           AutoRemove: true,

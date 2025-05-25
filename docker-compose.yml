@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis
+    container_name: redis-server
+
+  build-worker:
+    build: ./build-worker
+    container_name: build-worker
+    entrypoint: [ "true" ]
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis-server
+
+  build-orchestrator:
+    build: ./build-orchestrator
+    container_name: build-orchestrator
+    environment:
+      - PORT=3000
+      - REDIS_HOST=redis-server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./secrets:/app/secrets:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis

@@ -1,9 +1,11 @@
 {
   "name": "build-orchestrator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "orchestrator.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc && node ./dist/orchestrator.js",
+    "build": "tsc",
+    "start":"node ./dist/orchestrator.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
   "dependencies": {
     "bullmq": "^5.53.0",
     "dockerode": "^4.0.6",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "helmet": "^8.1.0"
   }

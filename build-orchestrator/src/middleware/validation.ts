@@ -5,7 +5,7 @@ export function validateBuildPayload(
   res: Response, 
   next: NextFunction
 ) {
-  if (!req.body.projectId || !req.body.repoUrl) {
+  if (!req.body.project_id || !req.body.repo_url) {
     res.status(400).json({ error: 'Missing required fields' });
     return
   }
