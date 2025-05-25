@@ -7,7 +7,7 @@ async function startServer() {
     await redis.ping();
     console.log('Redis connected');
 
-    const port = config.get('API_PORT') || 3000;
+    const port = config.get('PORT') || 3000;
     app.listen(port, () => {
       console.log(`Orchestrator running on port ${port}`);
     });

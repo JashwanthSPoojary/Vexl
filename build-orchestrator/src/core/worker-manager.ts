@@ -6,7 +6,9 @@ export class WorkerManager {
   private docker = new Docker();
   async spawnWorker(build_id: string, payload: BuildPayload) {
     try {
+      console.log("Spawning build-worker with payload:", payload);
       const secretsPath = path.join(process.cwd(), "secrets");
+      console.log('Resolved secrets path:', secretsPath);
       await this.docker.run("build-worker", [], process.stdout, {
         Env: [
           `BUILD_ID=${build_id}`,
@@ -28,6 +30,7 @@ export class WorkerManager {
         },
       });
     } catch (error) {
+        console.error('spawnWorker failed:', error);
         throw Error(`spawnWorker failed : ${error}`);
     }
   }

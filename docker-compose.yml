@@ -23,7 +23,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./secrets:/app/secrets:ro
+      - C:/Users/jashwanth/OneDrive/Desktop/code/now/last_project_folder/secrets:/app/secrets:ro
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis

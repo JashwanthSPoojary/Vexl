@@ -1,6 +1,8 @@
 import { Builder } from "./services/builder";
 import { BuildState } from "./core/build-state";
 const { BUILD_ID, PROJECT_ID, REPO_URL, ENVS_JSON } = process.env;
+console.log("hello are you running");
+console.log(process.env.BUILD_ID);
 if (!BUILD_ID || !PROJECT_ID || !REPO_URL) {
   console.log("not specified !BUILD_ID || !PROJECT_ID || !REPO_URL");
   process.exit(1);

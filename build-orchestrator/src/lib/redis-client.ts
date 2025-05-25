@@ -1,6 +1,7 @@
 import { Redis } from "ioredis";
+import { config } from "../config";
 export const redis = new Redis({
-  host: process.env.REDIS_HOST || "127.0.0.1",
+  host: config.get('REDIS_HOST') || "127.0.0.1",
   port: 6379,
   maxRetriesPerRequest: null,
   connectTimeout: 5000,
