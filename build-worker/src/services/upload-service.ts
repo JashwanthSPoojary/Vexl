@@ -8,11 +8,11 @@ export class UploadService {
   private s3: S3Client;
   constructor() {
     this.s3 = new S3Client({
-      endpoint: process.env.DIGITALOCEAN_SPACES_URL!,
-      region: process.env.DIGITALOCEAN_SPACES_REGION!,
+      endpoint: process.env.DIGITALOCEAN_SPACES_URL!.trim(),
+      region:'blr1',
       credentials: {
-        accessKeyId: process.env.DIGITALOCEAN_SPACES_ACCESS_ID!,
-        secretAccessKey: process.env.DIGITALOCEAN_SPACES_SECRET_KEY!,
+        accessKeyId: process.env.DIGITALOCEAN_SPACES_ACCESS_ID!.trim(),
+        secretAccessKey: process.env.DIGITALOCEAN_SPACES_SECRET_KEY!.trim(),
       },
       forcePathStyle: false,
     });
@@ -54,7 +54,7 @@ export class UploadService {
     const key = `__outputs/${project_id}/${relativePath.replace(/\\/g, "/")}`;
     logger.log(`Uploading: ${key}`);
     const data = new PutObjectCommand({
-      Bucket: process.env.DIGITALOCEAN_SPACES_BUCKET_NAME!,
+      Bucket: process.env.DIGITALOCEAN_SPACES_BUCKET_NAME!.trim(),
       Key: key,
       Body: fs.createReadStream(file_path),
       ContentType: mime.lookup(file_path) || 'application/octet-stream',

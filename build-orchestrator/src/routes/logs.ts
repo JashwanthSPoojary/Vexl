@@ -3,7 +3,7 @@ import { redis } from '../lib/redis-client';
 
 export async function handleBuildLogs(req: Request, res: Response) {
   const { id: buildId } = req.params;
-  const logStreamKey = `build:logs:${buildId}`;
+  const logStreamKey = `logs:${buildId}`;
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -52,7 +52,7 @@ export async function handleBuildLogs(req: Request, res: Response) {
     }
   }
 }
-
 // Attach to router
 export const logs_router = Router();
 logs_router.get('/builds/:id/logs', handleBuildLogs);
+

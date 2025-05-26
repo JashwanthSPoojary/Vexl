@@ -18,12 +18,20 @@ services:
     build: ./build-orchestrator
     container_name: build-orchestrator
     environment:
-      - PORT=3000
+      - PORT=3001
       - REDIS_HOST=redis-server
+      - BIND_PATH=C:/personal-projects/secrets
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
-      - C:/Users/jashwanth/OneDrive/Desktop/code/now/last_project_folder/secrets:/app/secrets:ro
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis
+  proxy-server:
+    build: ./proxy-server
+    container_name: proxy-server
+    environment:
+      - PORT=3002
+      - CDN_URL=${CDN_URL}
+    ports:
+      - "3002:3002"
