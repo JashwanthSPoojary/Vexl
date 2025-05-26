@@ -1,0 +1,23 @@
+{
+  "name": "proxy-server",
+  "version": "1.0.0",
+  "main": "proxy-server.js",
+  "scripts": {
+    "dev": "tsc && node ./dist/proxy-server.js",
+    "build": "tsc",
+    "start": "node ./dist/proxy-server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5"
+  }
+}
