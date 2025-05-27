@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react"
 
 import { projects as initialProjects } from "@/lib/data"
-import { filterProjects, sortProjects, type SortKey } from "@/lib/workspace-page-utils"
+import { filterProjects, sortProjects, type SortKey } from "@/lib/utils/workspace-page-utils"
 
 type SortOption = {
   label: string

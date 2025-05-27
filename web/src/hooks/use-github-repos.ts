@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import type { Repo } from "@/types/types";
-import { sortRepos, transformGitHubRepo } from "@/lib/new-workspace-page-utils";
+import { sortRepos, transformGitHubRepo } from "@/lib/utils/new-workspace-page-utils";
 import { getAllRepos } from "@/actions/repos";
 
 export function useRepos(access_token: string | null) {

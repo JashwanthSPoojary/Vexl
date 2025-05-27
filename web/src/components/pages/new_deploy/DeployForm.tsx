@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { Loader } from "lucide-react";
+import { Loader, Plus, Trash2 } from "lucide-react";
 
 export default function DeployForm({
   repo_url,
@@ -17,21 +17,47 @@ export default function DeployForm({
 }) {
   const [name, setName] = useState(initial_name);
   const [isDeploying, setIsDeploying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleDeploy = async () => {
-    try {
-      setIsDeploying(true);
-      const result = await deployProject(repo_url, name);
-      console.log("Deployed:", result);
+  const [envVars, setEnvVars] = useState([{ key: "", value: "" }]);
 
-      if (result?.workspaceSlug && result?.projectName) {
-        router.push(`/${result.workspaceSlug}/${result.projectName}`);
+  const handleEnvChange = (
+    index: number,
+    field: "key" | "value",
+    newValue: string
+  ) => {
+    const updated = [...envVars];
+    updated[index][field] = newValue;
+    setEnvVars(updated);
+  };
+
+  const addEnvVar = () => setEnvVars([...envVars, { key: "", value: "" }]);
+  const removeEnvVar = (index: number) => {
+    const updated = envVars.filter((_, i) => i !== index);
+    setEnvVars(updated);
+  };
+
+  const handleDeploy = async () => {
+    setIsDeploying(true);
+    setError(null);
+
+    try {
+      const result = await deployProject(repo_url, name,envVars);
+
+      if (!result || result.error) {
+        setError(result.error || "Deployment failed.");
+        return;
+      }
+
+      if (result.data?.workspaceSlug && result.data.projectName) {
+        router.push(`/new/deploy/${result.data.build_id}`);
       } else {
-        console.error("Deployment failed: invalid response", result);
+        setError("Deployment succeeded, but missing redirect info.");
       }
     } catch (err) {
       console.error("Deployment error:", err);
+      setError("Unexpected deployment error.");
     } finally {
       setIsDeploying(false);
     }
@@ -42,6 +68,8 @@ export default function DeployForm({
       <h1 className="text-xl sm:text-2xl font-bold text-center">
         Deploy Your React Project
       </h1>
+
+      {error && <div className="text-sm text-red-500">{error}</div>}
 
       <div className="space-y-2">
         <Label htmlFor="repo">Repository URL</Label>
@@ -57,6 +85,46 @@ export default function DeployForm({
           disabled={isDeploying}
           className="w-full"
         />
+      </div>
+      <div className="space-y-2">
+        <Label>Environment Variables</Label>
+        <div className="space-y-2">
+          {envVars.map((env, index) => (
+            <div key={index} className="flex gap-2 items-center">
+              <Input
+                placeholder="KEY"
+                value={env.key}
+                onChange={(e) => handleEnvChange(index, "key", e.target.value)}
+                disabled={isDeploying}
+              />
+              <Input
+                placeholder="value"
+                value={env.value}
+                onChange={(e) =>
+                  handleEnvChange(index, "value", e.target.value)
+                }
+                disabled={isDeploying}
+              />
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={() => removeEnvVar(index)}
+                disabled={isDeploying}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={addEnvVar}
+            disabled={isDeploying}
+          >
+            <Plus className="h-4 w-4 mr-1" /> Add Variable
+          </Button>
+        </div>
       </div>
 
       <Button

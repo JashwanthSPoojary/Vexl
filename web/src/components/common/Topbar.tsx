@@ -14,14 +14,14 @@ export default function Topbar({ session }: { session: Session }) {
             className="flex items-center gap-3 group"
           >
             <div className="flex items-center justify-center rounded-md p-1 transition-colors group-hover:bg-muted/60">
-              <LayoutGrid className="h-5 w-5 text-foreground" />
+              <LayoutGrid className="h-5 w-5 text-foreground fill-white" />
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-sm font-semibold tracking-tight text-foreground">
-                DevDeploy
+                Vexl
               </span>
               <span className="text-[11px] text-muted-foreground">
-                by {user.name}
+                of {user.name}
               </span>
             </div>
           </Link>

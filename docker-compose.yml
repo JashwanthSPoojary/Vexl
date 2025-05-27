@@ -28,8 +28,8 @@ services:
     depends_on:
       - redis
   proxy-server:
-    build: ./proxy-server
-    container_name: proxy-server
+    build: ./proxy
+    container_name: proxy
     environment:
       - PORT=3002
       - CDN_URL=${CDN_URL}

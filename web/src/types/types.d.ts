@@ -32,5 +32,15 @@ export interface Project {
     branch: string
   }
 }
+export interface LogEntry {
+  timestamp: string
+  level: "info" | "error" | "warn"
+  message: string
+}
 
 export type SortBy = "created" | "updated" | "pushed" | "full_name";
+export type EnvVar = { key: string; value: string };
+export type DeployURL = {
+  show:boolean,
+  url:string
+}

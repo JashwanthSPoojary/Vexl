@@ -1,39 +1,67 @@
 "use server";
 import { authOptions } from "@/lib/authoptions";
-import { generateSlug } from "@/lib/delpoy-page-utils";
+import { generateSlug } from "@/lib/utils/delpoy-page-utils";
 import db from "@/lib/prisma";
 import { getServerSession } from "next-auth";
+import { convertEnvArrayToRecord } from "@/lib/utils/utils";
+import { EnvVar } from "@/types/types";
 
-export async function deployProject(repo_url: string, name: string) {
+export async function deployProject(repo_url: string, name: string,frontend_envs:EnvVar[]) {
   const session = await getServerSession(authOptions);
-  const workspaceSlug = session?.user.github_username
-  const slug = generateSlug();
-  if(!workspaceSlug) return
-  const deployment = await db.deployment.create({
-    data: {
-      projectName: name,
-      workspaceSlug: workspaceSlug,
-      repoUrl: repo_url,
-      deployUrl:slug,
-      status: "queued",
-    },
-  });
-  const res = await fetch("http://localhost:4000/deploy", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      url: repo_url,
-      project_id: deployment.id,
-    }),
-  });
 
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Deployment failed: ${error}`);
+  if (
+    !session ||
+    !session.user?.github_username ||
+    !session.user?.github_access_token
+  ) {
+    return { success: false, error: "Unauthorized or missing session." };
   }
 
-  return {
-    workspaceSlug,
-    projectName: name,
-  };
+  const workspaceSlug = session.user.github_username;
+  const slug = generateSlug();
+
+  if (!slug) {
+    return { success: false, error: "Failed to generate slug." };
+  }
+  const envs = convertEnvArrayToRecord(frontend_envs);
+
+  try {
+    const res = await fetch("http://localhost:3001/api/builds/build", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        repo_url,
+        project_id: slug,
+        envs
+      }),
+    });
+
+    if (res.status !== 202) {
+      return { success: false, error: "Failed to queue build process." };
+    }
+    await db.deployment.create({
+      data: {
+        projectName: name,
+        workspaceSlug,
+        repoUrl: repo_url,
+        deployUrl: slug,
+        status: "queued",
+      },
+    });
+
+    const data = await res.json();
+
+    return {
+      success: true,
+      data: {
+        build_id: data.build_id,
+        workspaceSlug,
+        projectName: name,
+        deployUrl: slug,
+      },
+    };
+  } catch (error) {
+    console.error("Deployment error:", error);
+    return { success: false, error: "Internal server error" };
+  }
 }

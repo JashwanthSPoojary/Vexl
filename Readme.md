@@ -1,1 +1,2 @@
-step 1 : do the class thing
+1) deployments id == done
+2) dashboard 

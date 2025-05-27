@@ -26,7 +26,7 @@ export function ModeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="h-8 w-8 rounded-md border"
+      className="h-8 w-8 rounded-md border cursor-pointer"
     >
       {isDark ? (
         <Sun className="h-[1.2rem] w-[1.2rem]" />

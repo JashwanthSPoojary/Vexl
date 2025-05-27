@@ -5,19 +5,21 @@
   "scripts": {
     "dev": "tsc && node ./dist/orchestrator.js",
     "build": "tsc",
-    "start":"node ./dist/orchestrator.js"
+    "start": "node ./dist/orchestrator.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.18",
     "@types/dockerode": "^3.3.39",
     "@types/express": "^5.0.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "bullmq": "^5.53.0",
+    "cors": "^2.8.5",
     "dockerode": "^4.0.6",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

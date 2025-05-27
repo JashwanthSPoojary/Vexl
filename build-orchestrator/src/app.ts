@@ -4,9 +4,11 @@ import { status_router } from './routes/status';
 import { logs_router } from './routes/logs';
 import helmet from 'helmet';
 import { redis } from './lib/redis-client';
+import cors from 'cors'
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(helmet());
 
