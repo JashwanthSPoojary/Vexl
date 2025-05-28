@@ -1,6 +1,6 @@
 "use client";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { SortKey } from "@/types/types";
 
 export type SortOption = {
   label: string;
@@ -19,6 +21,8 @@ interface SortDropdownProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  selectedSort:string
+  setSelectedSort:Dispatch<SetStateAction<string>>
 }
 
 export function SortDropdown({
@@ -26,18 +30,17 @@ export function SortDropdown({
   value,
   onChange,
   className,
+  selectedSort,
+  setSelectedSort
 }: SortDropdownProps) {
-  const selectedOption =
-    options.find((option) => option.value === value) || options[0];
-
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Button
           variant="outline"
           className={cn("text-sm whitespace-nowrap", className)}
         >
-          {selectedOption.label}
+          {selectedSort?selectedSort:options[0].label}
           <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -45,7 +48,10 @@ export function SortDropdown({
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => onChange(option.value)}
+            onClick={() =>{
+              onChange(option.value);
+              setSelectedSort(option.label);
+            }}
             className={option.value === value ? "bg-accent" : ""}
           >
             {option.label}

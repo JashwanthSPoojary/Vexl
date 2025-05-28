@@ -1,12 +1,11 @@
 import { Request, Response, Router } from "express";
-import { generateId } from "../lib/utils";
 import { validateBuildPayload } from "../middleware/validation";
 import { BuildQueue } from "../core/queue";
 
 const queue = new BuildQueue();
 
 export async function handleBuild(req: Request, res: Response) {
-  const build_id = generateId();
+  const build_id = req.params.build;
   try {
     await queue.addQueue(build_id, { ...req.body });
     res.status(202).json({
@@ -19,4 +18,4 @@ export async function handleBuild(req: Request, res: Response) {
 }
 
 export const build_router = Router();
-build_router.post('/builds/build',validateBuildPayload,handleBuild);
+build_router.post('/builds/:build',validateBuildPayload,handleBuild);

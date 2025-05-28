@@ -1,16 +1,21 @@
 import { Github, MoreHorizontal } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import type { Project } from "@/types/types"
-import { CommitInfo } from "./CommitInfo"
 import { ProjectIcon } from "./ProjectIcon"
+import Link from "next/link"
 
 interface ProjectCardProps {
   project: Project
+  workspace:string
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project , workspace }: ProjectCardProps) {
   return (
     <div className="border rounded-lg overflow-hidden bg-card">
       <div className="p-4 sm:p-5">
@@ -18,8 +23,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex items-center gap-3 sm:gap-4">
             <ProjectIcon icon={project.icon} background={project.iconBg} size="sm" />
             <div>
-              <h3 className="font-medium text-card-foreground text-sm sm:text-base cursor-pointer">{project.name}</h3>
-              <p className="text-xs sm:text-sm text-muted-foreground cursor-pointer">{project.url}</p>
+              <Link href={`/${workspace}/${project.name}`}>
+              <h3 className="font-medium text-card-foreground text-sm sm:text-base cursor-pointer">
+                {project.name}
+              </h3>
+              </Link>
+              <p className="text-xs sm:text-sm text-muted-foreground cursor-pointer">
+                {project.url ?? "No deployment URL"}
+              </p>
             </div>
           </div>
 
@@ -31,7 +42,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Visit</DropdownMenuItem>
+                {project.url && (
+                  <DropdownMenuItem onClick={() => window.open(project.url!, "_blank")}>
+                    Visit
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>Edit</DropdownMenuItem>
                 <DropdownMenuItem>Rename</DropdownMenuItem>
                 <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
@@ -47,12 +62,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         )}
 
-        <div className="mt-3 sm:mt-4">
-          <CommitInfo
-            message={project.lastCommit.message}
-            date={project.lastCommit.date}
-            branch={project.lastCommit.branch}
-          />
+        <div className="mt-3 sm:mt-4 text-xs text-muted-foreground">
+          Created at: {project.createdAt}
         </div>
       </div>
     </div>

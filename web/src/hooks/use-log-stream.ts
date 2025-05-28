@@ -10,7 +10,7 @@ export function useLogStream(buildId: string) {
   const eventSourceRef = useRef<EventSource | null>(null)
 
   useEffect(() => {
-    const eventSource = new EventSource(`http://localhost:3001/api/builds/${buildId}/logs`)
+    const eventSource = new EventSource(`${process.env.ORCHESTRATOR_URL}/api/builds/${buildId}/logs`)
     eventSourceRef.current = eventSource
 
     eventSource.onopen = () => setIsConnected(true)

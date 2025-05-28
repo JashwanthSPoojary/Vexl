@@ -1,12 +1,16 @@
 "use server";
 import { authOptions } from "@/lib/authoptions";
-import { generateSlug } from "@/lib/utils/delpoy-page-utils";
+import { generateId, generateSlug } from "@/lib/utils/delpoy-page-utils";
 import db from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { convertEnvArrayToRecord } from "@/lib/utils/utils";
+import { convertEnvArrayToRecord } from "@/lib/utils";
 import { EnvVar } from "@/types/types";
 
-export async function deployProject(repo_url: string, name: string,frontend_envs:EnvVar[]) {
+export async function deployProject(
+  repo_url: string,
+  name: string,
+  frontend_envs: EnvVar[]
+) {
   const session = await getServerSession(authOptions);
 
   if (
@@ -19,20 +23,20 @@ export async function deployProject(repo_url: string, name: string,frontend_envs
 
   const workspaceSlug = session.user.github_username;
   const slug = generateSlug();
-
+  const build_id = generateId();
   if (!slug) {
     return { success: false, error: "Failed to generate slug." };
   }
   const envs = convertEnvArrayToRecord(frontend_envs);
 
   try {
-    const res = await fetch("http://localhost:3001/api/builds/build", {
+    const res = await fetch(`http://localhost:3001/api/builds/${build_id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         repo_url,
         project_id: slug,
-        envs
+        envs,
       }),
     });
 
@@ -45,7 +49,8 @@ export async function deployProject(repo_url: string, name: string,frontend_envs
         workspaceSlug,
         repoUrl: repo_url,
         deployUrl: slug,
-        status: "queued",
+        buildId:build_id,
+        status: "queued"
       },
     });
 

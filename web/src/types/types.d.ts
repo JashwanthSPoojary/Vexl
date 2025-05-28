@@ -21,16 +21,12 @@ export interface Repo {
 }
 export interface Project {
   id: string
-  name: string
-  url: string
-  icon: string
-  iconBg: string
-  repo: string
-  lastCommit: {
-    message: string
-    date: string
-    branch: string
-  }
+  name: string 
+  url: string | null 
+  icon: string 
+  iconBg: string 
+  repo: string 
+  createdAt: string 
 }
 export interface LogEntry {
   timestamp: string
@@ -44,3 +40,8 @@ export type DeployURL = {
   show:boolean,
   url:string
 }
+export type SortOption = {
+  label: string
+  value: string
+}
+export type SortKey = "name" | "date" | "url"

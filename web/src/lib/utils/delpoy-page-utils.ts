@@ -3,6 +3,8 @@ import {
   adjectives,
   animals,
 } from "unique-names-generator";
+import crypto from 'crypto';
+
 
 export const generateSlug = () => {
   try {
@@ -22,3 +24,7 @@ export const generateSlug = () => {
     
   }
 };
+export function generateId() {
+  return crypto.randomUUID();
+}
+

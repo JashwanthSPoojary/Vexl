@@ -29,7 +29,7 @@ export function LogsViewer({ buildId }: LogsViewerProps) {
   const lastLog = logs[logs.length - 1];
 
   if (lastLog?.message.includes("Build pipeline completed")) {
-    // Show deploy URL or trigger any follow-up action
+    
     setShowDeployURL({show:true,url:"localhost:3000"});
   }
 }, [logs]);

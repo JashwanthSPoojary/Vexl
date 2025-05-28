@@ -1,12 +1,14 @@
 "use client";
 import { SearchBar } from "./SearchBar";
-import { useProjectSearch , sortOptions } from "@/hooks/use-project-search";
+import { useProjectSearch} from "@/hooks/use-project-search";
 import { CommandBox } from "./CommandBox";
 import { SortDropdown } from "./SortDropdown";
 import { AddNewButton } from "./AddNewButton";
 import { ProjectsGrid } from "./ProjectsGrid";
+import SkeletonProjectsCard from "./SkeletonProjectsCard";
+import { sortOptions } from "@/lib/utils/workspace-page-utils";
 
-export default function ProjectDashboard() {
+export default function ProjectDashboard({workspace}:{workspace:string}) {
   const {
     searchTerm,
     sortedProjects,
@@ -15,7 +17,10 @@ export default function ProjectDashboard() {
     setSortOption,
     setCommandOpen,
     onProjectSelect,
-  } = useProjectSearch();
+    loading,
+    selectedSort,
+    setSelectedSort
+  } = useProjectSearch(workspace);
   return (
     <div className="container mx-auto px-8  md:px-16 py-8">
       <div className="flex flex-col gap-6 mb-8">
@@ -33,6 +38,8 @@ export default function ProjectDashboard() {
               options={sortOptions}
               value={`${sortOptions[0].value}`}
               onChange={setSortOption}
+              selectedSort={selectedSort}
+              setSelectedSort={setSelectedSort}
               className="flex-1 sm:flex-none"
             />
             <AddNewButton
@@ -41,7 +48,7 @@ export default function ProjectDashboard() {
           </div>
         </div>
       </div>
-      <ProjectsGrid projects={sortedProjects} />
+      {loading?<SkeletonProjectsCard/>:<ProjectsGrid projects={sortedProjects} workspace={workspace} />}
       <CommandBox open={commandOpen} onOpenChange={setCommandOpen} onSelect={onProjectSelect} />
     </div>
   );

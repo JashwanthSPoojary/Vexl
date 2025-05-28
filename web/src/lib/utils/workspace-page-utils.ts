@@ -1,6 +1,4 @@
-import type { Project } from "@/types/types"
-
-export type SortKey = "name" | "date" | "url"
+import type { Project, SortKey, SortOption } from "@/types/types"
 
 export function sortProjects(projects: Project[], sortKey: SortKey, ascending = true): Project[] {
   const sortedProjects = [...projects]
@@ -13,13 +11,12 @@ export function sortProjects(projects: Project[], sortKey: SortKey, ascending = 
         comparison = a.name.localeCompare(b.name)
         break
       case "url":
-        comparison = a.url.localeCompare(b.url)
+        comparison = (a.url ?? "").localeCompare(b.url ?? "")
         break
       case "date":
-        // Convert dates to timestamps for comparison
-        const dateA = getDateFromString(a.lastCommit.date)
-        const dateB = getDateFromString(b.lastCommit.date)
-        comparison = dateA.getTime() - dateB.getTime()
+        const dateA = new Date(a.createdAt).getTime()
+        const dateB = new Date(b.createdAt).getTime()
+        comparison = dateA - dateB
         break
       default:
         comparison = 0
@@ -28,7 +25,6 @@ export function sortProjects(projects: Project[], sortKey: SortKey, ascending = 
     return ascending ? comparison : -comparison
   })
 }
-
 export function filterProjects(projects: Project[], searchTerm: string): Project[] {
   if (!searchTerm) return projects
 
@@ -37,53 +33,27 @@ export function filterProjects(projects: Project[], searchTerm: string): Project
   return projects.filter((project) => {
     return (
       project.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-      project.url.toLowerCase().includes(lowerCaseSearchTerm) ||
-      project.repo.toLowerCase().includes(lowerCaseSearchTerm) ||
-      project.lastCommit.message.toLowerCase().includes(lowerCaseSearchTerm)
+      (project.url?.toLowerCase().includes(lowerCaseSearchTerm) ?? false) ||
+      project.repo.toLowerCase().includes(lowerCaseSearchTerm)
     )
   })
-};
-
-// Helper function to convert date strings to Date objects
-function getDateFromString(dateStr: string): Date {
-  // Handle relative dates like "2d ago"
-  if (dateStr.includes("ago")) {
-    const now = new Date()
-    const match = dateStr.match(/(\d+)([dhm])/)
-
-    if (match) {
-      const value = Number.parseInt(match[1])
-      const unit = match[2]
-
-      if (unit === "d") {
-        now.setDate(now.getDate() - value)
-      } else if (unit === "h") {
-        now.setHours(now.getHours() - value)
-      } else if (unit === "m") {
-        now.setMinutes(now.getMinutes() - value)
-      }
-
-      return now
-    }
-  }
-
-  // Handle month names like "Apr 16"
-  if (dateStr.match(/[A-Za-z]{3} \d{1,2}/)) {
-    const [month, day] = dateStr.split(" ")
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    const monthIndex = months.findIndex((m) => m === month)
-
-    if (monthIndex !== -1) {
-      const now = new Date()
-      return new Date(now.getFullYear(), monthIndex, Number.parseInt(day))
-    }
-  }
-
-  // Handle dates like "5/13/24"
-  if (dateStr.match(/\d{1,2}\/\d{1,2}\/\d{2,4}/)) {
-    return new Date(dateStr)
-  }
-
-  // Default to current date if format is unknown
-  return new Date()
 }
+export function getIconColor(seed: string): string {
+  const colors = ["#FF5722", "#4CAF50", "#2196F3", "#9C27B0", "#FFC107"]
+  const hash = seed.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return colors[hash % colors.length]
+}
+export function extractRepoFromUrl(url: string): string {
+  try {
+    const parts = new URL(url).pathname.split("/").filter(Boolean)
+    return parts.length >= 2 ? `${parts[0]}/${parts[1]}` : url
+  } catch {
+    return url
+  }
+}
+export const sortOptions: SortOption[] = [
+  { label: "Sort by name (A-Z)", value: "name-asc" },
+  { label: "Sort by name (Z-A)", value: "name-desc" },
+  { label: "Sort by newest", value: "date-desc" },
+  { label: "Sort by oldest", value: "date-asc" },
+]

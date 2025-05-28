@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Command } from "cmdk";
 import { Search } from "lucide-react";
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { projects } from "@/lib/data";
+import { useProjectSearch } from "@/hooks/use-project-search";
 
 interface CommandBoxProps {
   open: boolean;
@@ -15,6 +15,7 @@ interface CommandBoxProps {
 }
 
 export function CommandBox({ open, onOpenChange, onSelect }: CommandBoxProps) {
+  const { initialProjects: projects } = useProjectSearch();
   const [search, setSearch] = useState("");
 
   useEffect(() => {

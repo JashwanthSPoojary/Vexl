@@ -12,6 +12,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum DeploymentStatus {
+  active
+  queued
+  failed
+}
 
 model User {
   id             String   @id @default(cuid())
@@ -29,7 +34,8 @@ model Deployment {
   projectName   String  
   workspaceSlug String   
   repoUrl       String
-  status        String   
+  status        DeploymentStatus
+  buildId       String   
   deployUrl     String?  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
