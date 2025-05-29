@@ -33,6 +33,30 @@ export interface LogEntry {
   level: "info" | "error" | "warn"
   message: string
 }
+export interface SettingsProject {
+  id: string
+  name: string
+  domains: Domain[]
+  environments: Environment[]
+}
+export interface Domain {
+  id: string
+  name: string
+  isPrimary: boolean
+}
+export interface Environment {
+  id: string
+  name: string
+  branch: string
+  url?: string
+}
+export interface SettingsContextType {
+  project: Project
+  isLoading: boolean
+  error: Error | null
+  updateProject: (updates: Partial<Project>) => Promise<void>
+}
+
 
 export type SortBy = "created" | "updated" | "pushed" | "full_name";
 export type EnvVar = { key: string; value: string };
@@ -45,3 +69,4 @@ export type SortOption = {
   value: string
 }
 export type SortKey = "name" | "date" | "url"
+export type SettingsSection = "general" | "domains" | "environments"

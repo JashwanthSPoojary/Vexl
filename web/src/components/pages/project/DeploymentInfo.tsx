@@ -1,23 +1,20 @@
 import { Button } from "@/components/ui/button";
-import {
-  ExternalLink,
-  Copy,
-  Logs,
-} from "lucide-react";
+import { ExternalLink, Copy, Logs } from "lucide-react";
 import Link from "next/link";
 
-interface DeploymentInfoProps{
-    id: string;
-    projectName: string;
-    workspaceSlug: string;
-    repoUrl: string;
-    status: string;
-    deployUrl: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-} 
+interface DeploymentInfoProps {
+  id: string;
+  projectName: string;
+  workspaceSlug: string;
+  repoUrl: string;
+  status: string;
+  buildId: string;
+  deployUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-export function DeploymentInfo({data}:{data:DeploymentInfoProps}) {
+export function DeploymentInfo({ data }: { data: DeploymentInfoProps }) {
   return (
     <div className="w-full lg:w-80 space-y-6 text-sm">
       <div>
@@ -26,9 +23,12 @@ export function DeploymentInfo({data}:{data:DeploymentInfoProps}) {
           <span className="font-mono text-foreground truncate text-xs sm:text-sm">
             {data.deployUrl}
           </span>
+          {/* change this */}
+          <Link target="_blank" href={`http://${data.deployUrl}.localhost:3002`}>
           <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
-            <Copy className="h-3 w-3" />
+            <ExternalLink className="h-3 w-3" />
           </Button>
+          </Link>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export function DeploymentInfo({data}:{data:DeploymentInfoProps}) {
             <span className="font-mono text-foreground truncate text-xs sm:text-sm">
               {data.projectName}
             </span>
-            <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0" />
+            <Copy className="h-3 w-3 text-muted-foreground shrink-0" />
           </div>
         </div>
       </div>
@@ -50,8 +50,16 @@ export function DeploymentInfo({data}:{data:DeploymentInfoProps}) {
           <h3 className="text-muted-foreground mb-2">Status</h3>
           <div className="flex items-center gap-2">
             {/* change this */}
-            <div className={`w-2 h-2 rounded-full ${data.status==="active"?"bg-green-600":"bg-red-600"}`} />
-            <span className="text-foreground">{"ready"}</span>
+            <div
+              className={`w-2 h-2 rounded-full ${
+                data.status === "active"
+                  ? "bg-green-600"
+                  : data.status === "queued"
+                  ? "bg-yellow-500"
+                  : "bg-red-600"
+              }`}
+            />
+            <span className="text-foreground">{data.status}</span>
           </div>
         </div>
 
@@ -69,13 +77,11 @@ export function DeploymentInfo({data}:{data:DeploymentInfoProps}) {
           </div>
         </div>
         <div className="mt-10">
-          <Link href={`/`}>
-          <Button
-            className="w-full h-10 text-base justify-start gap-6 cursor-pointer"
-          >
-            <Logs className="h-5 w-5" />
-            Build logs
-          </Button>
+          <Link href={`/new/deploy/${data.buildId}`}>
+            <Button className="w-full h-10 text-base justify-start gap-6 cursor-pointer">
+              <Logs className="h-5 w-5" />
+              Build logs
+            </Button>
           </Link>
         </div>
       </div>

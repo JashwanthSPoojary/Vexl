@@ -1,6 +1,5 @@
 import ClientPage from "@/components/pages/deployments/ClientPage";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import db from "@/lib/prisma";
 
 export default async function Page({
   params,
@@ -8,24 +7,24 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const build_id = (await params).id;
+  const profile = await db.deployment.findUnique({
+    where:{
+      buildId:build_id
+    },
+    select:{
+      projectName:true,
+      workspaceSlug:true
+    }
+  });
+  if(!profile){
+    // change this
+    return <div> no data available or no profile</div>
+  }
 
   return (
     <div className="flex justify-center px-4 sm:px-6 lg:px-8 py-6">
       <div className="w-full max-w-4xl space-y-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-semibold mb-1">Build Logs</h1>
-          <p className="text-muted-foreground text-sm mb-4">
-            Live streaming logs from your deployment
-          </p>
-
-          <Link href="/" >
-            <Button className="cursor-pointer">
-              Continue to Dashboard
-            </Button>
-          </Link>
-        </div>
-
-        <ClientPage buildId={build_id} />
+        <ClientPage buildId={build_id} profile={profile} />
       </div>
     </div>
   );

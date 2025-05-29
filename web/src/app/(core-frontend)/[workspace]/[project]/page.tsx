@@ -1,4 +1,5 @@
 import { DeploymentInfo } from "@/components/pages/project/DeploymentInfo";
+import DeploymentLinks from "@/components/pages/project/DeploymentLinks";
 import { DeploymentPreview } from "@/components/pages/project/DeploymentPreview";
 import { DeploymentTabs } from "@/components/pages/project/DeploymentTabs";
 import db from "@/lib/prisma";
@@ -26,6 +27,7 @@ export default async function Page({
         <DeploymentPreview />
         <DeploymentInfo data={data} />
       </div>
+      <DeploymentLinks github_url={data.repoUrl} deploy_url={data.deployUrl}/>
     </>
   );
 }

@@ -15,9 +15,11 @@
     "@types/cors": "^2.8.18",
     "@types/dockerode": "^3.3.39",
     "@types/express": "^5.0.2",
+    "prisma": "^6.8.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@prisma/client": "^6.8.2",
     "bullmq": "^5.53.0",
     "cors": "^2.8.5",
     "dockerode": "^4.0.6",

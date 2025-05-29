@@ -121,6 +121,7 @@ export default function DeployForm({
             variant="secondary"
             onClick={addEnvVar}
             disabled={isDeploying}
+            className="cursor-pointer"
           >
             <Plus className="h-4 w-4 mr-1" /> Add Variable
           </Button>
@@ -130,7 +131,7 @@ export default function DeployForm({
       <Button
         onClick={handleDeploy}
         disabled={isDeploying}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto cursor-pointer"
       >
         {isDeploying ? (
           <div className="flex items-center justify-center gap-2">
