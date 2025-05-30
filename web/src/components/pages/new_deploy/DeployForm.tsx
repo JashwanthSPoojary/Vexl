@@ -43,7 +43,7 @@ export default function DeployForm({
     setError(null);
 
     try {
-      const result = await deployProject(repo_url, name,envVars);
+      const result = await deployProject(repo_url ,initial_name, name,envVars);
 
       if (!result || result.error) {
         setError(result.error || "Deployment failed.");

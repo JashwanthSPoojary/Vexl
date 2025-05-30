@@ -8,6 +8,7 @@ import { EnvVar } from "@/types/types";
 
 export async function deployProject(
   repo_url: string,
+  repo_name: string,
   name: string,
   frontend_envs: EnvVar[]
 ) {
@@ -21,6 +22,7 @@ export async function deployProject(
     return { success: false, error: "Unauthorized or missing session." };
   }
 
+  const github_access_token = session.user.github_access_token;
   const workspaceSlug = session.user.github_username;
   const slug = generateSlug();
   const build_id = generateId();
@@ -39,6 +41,24 @@ export async function deployProject(
         envs,
       }),
     });
+    await fetch(`https://api.github.com/repos/${workspaceSlug}/${repo_name}/hooks`, {
+      method: "POST",
+      headers: {
+        Authorization: `token ${github_access_token}`,
+        "Content-Type": "application/json",
+        Accept: "application/vnd.github.v3+json",
+      },
+      body: JSON.stringify({
+        name: "web",
+        active: true,
+        events: ["push"],
+        config: {
+          url: process.env.GITHUB_WEBHOOK_URL,
+          content_type: "json",
+          secret: process.env.GITHUB_WEBHOOK_SECRET, // same secret used to verify payloads
+        },
+      }),
+    });
 
     if (res.status !== 202) {
       return { success: false, error: "Failed to queue build process." };
@@ -49,9 +69,9 @@ export async function deployProject(
         workspaceSlug,
         repoUrl: repo_url,
         deployUrl: slug,
-        alternativeDeployUrl:slug,
-        buildId:build_id,
-        status: "queued"
+        alternativeDeployUrl: slug,
+        buildId: build_id,
+        status: "queued",
       },
     });
 

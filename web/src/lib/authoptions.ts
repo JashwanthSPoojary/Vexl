@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: GITHUB_SECRET,
       authorization: {
         params: {
-          scope: "read:user repo user:email",
+          scope: "read:user repo user:email admin:repo_hook",
           prompt: "consent",
         },
       },
@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ profile, account }) {
-       if (account?.provider === "github") {
+      if (account?.provider === "github") {
         await db.user.upsert({
           where: { githubId: account.providerAccountId },
           update: {
@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
             githubUsername: profile?.login || "",
             email: profile?.email || "",
             name: profile?.name,
-            avatarUrl: profile?.avatar_url ,
+            avatarUrl: profile?.avatar_url,
           },
         });
       }
@@ -53,8 +53,8 @@ export const authOptions: NextAuthOptions = {
       session.user.github_access_token = token.github_access_token as string;
       return session;
     },
-    async redirect({baseUrl}) {
-        return `${baseUrl}/post-login`
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/post-login`;
     },
   },
   session: {
