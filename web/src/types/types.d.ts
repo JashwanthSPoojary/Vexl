@@ -36,13 +36,12 @@ export interface LogEntry {
 export interface SettingsProject {
   id: string
   name: string
-  domains: Domain[]
+  domain: Domain
   environments: Environment[]
 }
 export interface Domain {
-  id: string
-  name: string
-  isPrimary: boolean
+  old_domain:string,
+  new_name:string
 }
 export interface Environment {
   id: string
@@ -69,4 +68,9 @@ export type SortOption = {
   value: string
 }
 export type SortKey = "name" | "date" | "url"
-export type SettingsSection = "general" | "domains" | "environments"
+export type SettingsSection = {
+  id: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
+}

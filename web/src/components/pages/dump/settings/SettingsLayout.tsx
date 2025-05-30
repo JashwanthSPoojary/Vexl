@@ -9,7 +9,9 @@ import { SettingsSidebar } from "./SettingsSidebar"
 import { SettingsContent } from "./SettingsContent"
 
 interface SettingsLayoutProps {
-  project?: SettingsProject
+  project?: {
+    deployUrl: string;
+} | null
   onProjectUpdate?: (project: Partial<SettingsProject>) => Promise<void>
   defaultSection?: SettingsSection
   className?: string
@@ -30,9 +32,9 @@ const defaultProject: SettingsProject = {
 }
 
 export function SettingsLayout({
-  project = defaultProject,
+  project,
   onProjectUpdate = async () => {},
-  defaultSection = "general",
+  defaultSection = "domain",
   className,
 }: SettingsLayoutProps) {
   const [activeSection, setActiveSection] = React.useState<SettingsSection>(defaultSection)
@@ -44,10 +46,7 @@ export function SettingsLayout({
   // Ensure project has all required properties
   const safeProject = React.useMemo(
     () => ({
-      id: project?.id || defaultProject.id,
-      name: project?.name || defaultProject.name,
-      domains: project?.domains || defaultProject.domains,
-      environments: project?.environments || defaultProject.environments,
+      deploy_url:project?.deployUrl
     }),
     [project],
   )

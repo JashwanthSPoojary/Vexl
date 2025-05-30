@@ -19,9 +19,9 @@ interface SettingsNavItem {
 }
 
 const settingsItems: SettingsNavItem[] = [
-  { id: "general", title: "General", icon: Settings },
-  { id: "domains", title: "Domains", icon: Globe },
-  { id: "environments", title: "Environments", icon: Layers },
+  // { id: "general", title: "General", icon: Settings },
+  { id: "domain", title: "Domain", icon: Globe }
+  // { id: "environments", title: "Environments", icon: Layers },
 ]
 
 export function SettingsSidebar({ activeSection, onSectionChange, onClose, isMobile }: SettingsSidebarProps) {

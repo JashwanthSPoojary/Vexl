@@ -27,7 +27,7 @@ export default async function Page({
         <DeploymentPreview />
         <DeploymentInfo data={data} />
       </div>
-      <DeploymentLinks github_url={data.repoUrl} deploy_url={data.deployUrl}/>
+      <DeploymentLinks github_url={data.repoUrl} deploy_url={data.alternativeDeployUrl}/>
     </>
   );
 }

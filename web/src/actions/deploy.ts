@@ -49,6 +49,7 @@ export async function deployProject(
         workspaceSlug,
         repoUrl: repo_url,
         deployUrl: slug,
+        alternativeDeployUrl:slug,
         buildId:build_id,
         status: "queued"
       },

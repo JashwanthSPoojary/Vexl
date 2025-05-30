@@ -42,6 +42,7 @@ services:
     environment:
       - PORT=3002
       - CDN_URL=${CDN_URL}
+      - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydb
     ports:
       - "3002:3002"
 volumes:

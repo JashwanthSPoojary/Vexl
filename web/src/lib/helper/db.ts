@@ -7,7 +7,8 @@ export async function getProjectById(workspace: string, projectName: string) {
       projectName
     },
     select:{
-        deployUrl:true
+        deployUrl:true,
+        alternativeDeployUrl:true
     }
   })
 }

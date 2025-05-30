@@ -1,46 +1,25 @@
-"use client"
+"use client";
+import { updateProjectSubdomain } from "@/actions/domain";
+import ProjectSettings from "./ProjectSettings";
 
-import { SettingsLayout } from "@/components/pages/settings/SettingsLayout"
-import { useIsMobile } from "@/hooks/use-media-query"
-import { SettingsProject } from "@/types/types"
-
-
-
-const mockProject: SettingsProject = {
-  id: "project-123",
-  name: "My Awesome Project",
-  domains: [
-    { id: "domain-1", name: "example.com", isPrimary: true },
-    { id: "domain-2", name: "www.example.com", isPrimary: false },
-  ],
-  environments: [
-    { id: "env-1", name: "Production", branch: "main", url: "https://example.com" },
-    { id: "env-2", name: "Preview", branch: "develop", url: "https://preview.example.com" },
-  ],
-}
-
-export default function Settings() {
-  const isMobile = useIsMobile()
-
-  const handleProjectUpdate = async (updates: Partial<SettingsProject>) => {
-    console.log("Updating project:", updates)
-    await new Promise((resolve) => setTimeout(resolve, 500))
+export default function Settings({
+  project_data,
+}: {
+  project_data: {
+    deployUrl: string;
+    alternativeDeployUrl: string | null;
+  };
+}) {
+  if (!project_data.alternativeDeployUrl) {
+    return <div>no data available</div>;
   }
 
   return (
-    <div className={`${isMobile ? "p-0" : "container mx-auto p-6"}`}>
-      {!isMobile && (
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">Project Settings</h1>
-          <p className="text-muted-foreground">Manage your project configuration</p>
-        </div>
-      )}
-
-      <SettingsLayout
-        project={mockProject}
-        onProjectUpdate={handleProjectUpdate}
-        className={isMobile ? "h-screen" : "h-[600px]"}
-      />
-    </div>
-  )
+    <ProjectSettings
+      subdomain={project_data.alternativeDeployUrl}
+      onSubdomainUpdate={async (newSubdomain: string) => {
+        await updateProjectSubdomain(project_data.deployUrl, newSubdomain);
+      }}
+    />
+  );
 }

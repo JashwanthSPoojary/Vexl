@@ -30,15 +30,17 @@ model User {
   @@map("users")
 }
 model Deployment {
-  id            String   @id @default(cuid()) 
-  projectName   String  
-  workspaceSlug String   
-  repoUrl       String
-  status        DeploymentStatus
-  buildId       String @unique  
-  deployUrl     String?  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                   String            @id @default(cuid())
+  projectName          String
+  workspaceSlug        String
+  repoUrl              String
+  status               DeploymentStatus
+  buildId              String            @unique
+  deployUrl            String @unique
+  alternativeDeployUrl String?           
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
 }
+
 
 

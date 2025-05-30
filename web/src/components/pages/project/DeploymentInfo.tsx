@@ -10,6 +10,7 @@ interface DeploymentInfoProps {
   status: string;
   buildId: string;
   deployUrl: string | null;
+  alternativeDeployUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,10 +22,10 @@ export function DeploymentInfo({ data }: { data: DeploymentInfoProps }) {
         <h3 className="text-muted-foreground mb-2">Deployment</h3>
         <div className="flex items-center gap-2">
           <span className="font-mono text-foreground truncate text-xs sm:text-sm">
-            {data.deployUrl}
+            {data?.alternativeDeployUrl}
           </span>
           {/* change this */}
-          <Link target="_blank" href={`http://${data.deployUrl}.localhost:3002`}>
+          <Link target="_blank" href={`http://${data?.alternativeDeployUrl}.localhost:3002`}>
           <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
             <ExternalLink className="h-3 w-3" />
           </Button>

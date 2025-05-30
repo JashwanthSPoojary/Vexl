@@ -9,7 +9,9 @@ import { DomainsSettings } from './section/DomainsSettings'
 
 interface SettingsContentProps {
   activeSection: SettingsSection
-  project: SettingsProject
+  project: {
+    deploy_url: string | undefined;
+}
   onProjectUpdate: (updates: Partial<SettingsProject>) => Promise<void>
   isLoading: boolean
   error: Error | null
@@ -19,7 +21,7 @@ interface SettingsContentProps {
 
 const sectionTitles: Record<SettingsSection, string> = {
   general: "General",
-  domains: "Domains",
+  domain: "Domain",
   environments: "Environments",
 }
 
@@ -65,7 +67,7 @@ export function SettingsContent({
       {/* Content */}
       <div className="flex-1 overflow-auto">
         {/* {activeSection === "general" && <GeneralSettings {...commonProps} />} */}
-        {activeSection === "domains" && <DomainsSettings {...commonProps} />}
+        {activeSection === "domain" && <DomainsSettings {...commonProps} />}
         {/* change this */}
         {/* {activeSection === "environments" && <EnvironmentsSettings {...commonProps} />} */}
       </div>
