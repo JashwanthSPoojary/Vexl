@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function RepoCard({ repo }: { repo: Repo }) {
   return (
-    <div className="bg-muted/30 rounded-lg border px-4 py-4 hover:shadow-sm transition">
+    <div className="rounded-lg border px-4 py-4 hover:shadow-sm transition">
       <div className="flex justify-between items-start">
         <div>
           <div className="flex items-center gap-2">
@@ -18,14 +18,18 @@ export default function RepoCard({ repo }: { repo: Repo }) {
             {repo.description}
           </p>
         </div>
-        <Link href={{
-          pathname:'/new/deploy',
-          query:{
-            repo: repo.clone_url,
-            name:repo.name
-          }
-        }} >
-          <Button size="sm" variant="outline" className="cursor-pointer">
+        <Link
+          href={{
+            pathname: "/new/deploy",
+            query: {
+              repoUrl: repo.clone_url,
+              repoName: repo.name,
+              repoOwner: repo.repoOwner, 
+              defaultBranch: repo.defaultBranch, 
+            },
+          }}
+        >
+          <Button  size="sm" variant="outline" className="cursor-pointer !bg-foreground text-background hover:text-background/60">
             Import
           </Button>
         </Link>

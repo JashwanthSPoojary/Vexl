@@ -122,7 +122,7 @@ export default function ProjectSettings({ subdomain, onSubdomainUpdate }: Projec
         </Sheet>
       </div>
 
-      <div className="hidden lg:block w-80 bg-card rounded-lg">
+      <div className="hidden lg:block w-80 rounded-lg">
         <SidebarContent
           sections={settingsSections}
           activeSection={activeSection}

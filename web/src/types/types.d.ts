@@ -1,23 +1,30 @@
 export interface Repo {
   id: number;
   name: string;
-  clone_url:string;
-  description: string | null;
+  clone_url: string;
+  html_url: string;
+  description: string;
   stars: number;
   forks: number;
   isPrivate: boolean;
-  time: string; // if you're setting this manually as formatted time
+  time: string; // Formatted relative time
   updated_at: string;
-  language: string | null;
+  language: string;
   languageColor: string;
-  owner: {
-    login: string;
-    id: number;
-    avatar_url: string;
-    html_url: string;
-    type: string;
-    site_admin: boolean;
-  };
+  owner: string; // This is now the owner's login string
+  repoOwner: string;
+  repoName: string;
+  defaultBranch: string;
+}
+export interface RepoFetchResult {
+  success: boolean;
+  message: string;
+  data: any[];
+}
+export interface DeployProjectResult {
+  success: boolean;
+  message: string;
+  data: Record<string,string>;
 }
 export interface Project {
   id: string

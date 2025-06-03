@@ -1,5 +1,7 @@
+import { SettingsSkeleton } from "@/components/pages/project/SkeletonSettings";
 import Settings from "@/components/pages/settings/Settings";
 import { getProjectById } from "@/lib/helper/db";
+import { Suspense } from "react";
 
 export default async function Page({params}:{params:Promise<{workspace:string,project:string}>}) {
   const { workspace,project } = await params;
@@ -9,6 +11,8 @@ export default async function Page({params}:{params:Promise<{workspace:string,pr
       return <div> no data available</div>
     }
   return (
-    <Settings project_data={project_data}/>
+    <Suspense fallback={<SettingsSkeleton/>}>
+          <Settings project_data={project_data}/>
+    </Suspense>
   );
 }

@@ -7,16 +7,19 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useProjectSearch } from "@/hooks/use-project-search";
+import { useRouter } from "next/navigation";
 
 interface CommandBoxProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect?: (value: string) => void;
+  workspace:string
 }
 
-export function CommandBox({ open, onOpenChange, onSelect }: CommandBoxProps) {
-  const { initialProjects: projects } = useProjectSearch();
+export function CommandBox({ open, onOpenChange, onSelect,workspace }: CommandBoxProps) {
+  const { initialProjects: projects } = useProjectSearch(workspace);
   const [search, setSearch] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -54,6 +57,7 @@ export function CommandBox({ open, onOpenChange, onSelect }: CommandBoxProps) {
                   key={project.id}
                   value={project.name}
                   onSelect={() => {
+                    router.push(`/${workspace}/${project.name}`);
                     onSelect?.(project.id);
                     onOpenChange(false);
                   }}

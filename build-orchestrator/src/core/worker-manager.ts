@@ -44,6 +44,7 @@ export class WorkerManager {
           data: { status: "failed" },
         });
       }
+      console.log("build was success");
     } catch (error) {
       console.error("spawnWorker failed:", error);
       throw Error(`spawnWorker failed : ${error}`);

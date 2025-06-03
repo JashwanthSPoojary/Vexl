@@ -24,15 +24,13 @@ export function LogsList({
 
   return (
     <div
-      ref={scrollRef}
-      onScroll={onScroll}
-      className="overflow-y-auto bg-black font-mono text-sm sm:text-sm rounded-b-lg"
-      style={{
-        background: "rgb(0, 0, 0)",
-        color: "#00ff00",
-        height: "min(60vh, 500px)",
-      }}
-    >
+  ref={scrollRef}
+  onScroll={onScroll}
+  className="overflow-y-auto bg-black font-mono text-sm sm:text-sm rounded-3xl border"
+  style={{
+    height: "min(60vh, 500px)",
+  }}
+>
       {logs.length === 0 ? (
         <LogsEmptyState originalLogsEmpty={originalLogs.length === 0} />
       ) : (

@@ -24,7 +24,7 @@ export default async function Page({
     <>
       <DeploymentTabs />
       <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 sm:p-6">
-        <DeploymentPreview />
+        <DeploymentPreview subdomain={data.alternativeDeployUrl} />
         <DeploymentInfo data={data} />
       </div>
       <DeploymentLinks github_url={data.repoUrl} deploy_url={data.alternativeDeployUrl}/>

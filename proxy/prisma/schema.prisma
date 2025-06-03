@@ -34,13 +34,15 @@ model Deployment {
   projectName          String
   workspaceSlug        String
   repoUrl              String
+  repoOwner            String          
+  repoName             String          
+  branch               String           
+  githubWebhookId      Int?             
   status               DeploymentStatus
+  envs                 Json
   buildId              String            @unique
-  deployUrl            String @unique
+  deployUrl            String            @unique
   alternativeDeployUrl String?           
   createdAt            DateTime          @default(now())
   updatedAt            DateTime          @updatedAt
 }
-
-
-

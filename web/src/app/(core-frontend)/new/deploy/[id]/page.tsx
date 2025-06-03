@@ -1,4 +1,5 @@
-import ClientPage from "@/components/pages/deployments/ClientPage";
+import DeploymentHeader from "@/components/pages/deployments/DeploymentHeader";
+import { LogsViewer } from "@/components/pages/deployments/LogViewer";
 import db from "@/lib/prisma";
 
 export default async function Page({
@@ -22,9 +23,14 @@ export default async function Page({
   }
 
   return (
-    <div className="flex justify-center px-4 sm:px-6 lg:px-8 py-6">
-      <div className="w-full max-w-4xl space-y-6">
-        <ClientPage buildId={build_id} profile={profile} />
+    <div className="flex flex-col bg-background">
+      <div className="px-4 py-6">
+        <div className="max-w-5xl mx-auto space-y-4">
+          <DeploymentHeader profile={profile} />
+        </div>
+        <div className="flex-1 overflow-y-auto px-4">
+          <LogsViewer buildId={build_id}  />
+        </div>
       </div>
     </div>
   );

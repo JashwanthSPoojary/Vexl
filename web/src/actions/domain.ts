@@ -13,6 +13,13 @@ export async function updateProjectSubdomain(
   new_name: string
 ) {
   try {
+    const existing = await db.deployment.findFirst({
+      where: { alternativeDeployUrl: new_name },
+    });
+
+    if (existing) {
+      throw new Error("Subdomain already exists");
+    }
     await db.deployment.update({
       where: { deployUrl: old_name },
       data: { alternativeDeployUrl: new_name },

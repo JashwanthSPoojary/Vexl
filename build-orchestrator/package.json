@@ -19,6 +19,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@octokit/webhooks": "^14.0.0",
     "@prisma/client": "^6.8.2",
     "bullmq": "^5.53.0",
     "cors": "^2.8.5",

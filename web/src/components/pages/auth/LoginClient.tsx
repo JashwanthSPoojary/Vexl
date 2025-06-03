@@ -34,7 +34,7 @@ export default function LoginClient() {
       <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8">
         <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl px-6 py-12 sm:px-10 sm:py-14 bg-black rounded-3xl">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">
-            Log in to Vexl
+            Enter to Vexl
           </h1>
 
           <div className="space-y-5">

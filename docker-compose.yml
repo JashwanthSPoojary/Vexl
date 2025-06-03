@@ -29,6 +29,7 @@ services:
       - PORT=3001
       - REDIS_HOST=redis-server
       - BIND_PATH=C:/personal-projects/secrets
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
       - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydb
     ports:
       - "3001:3001"

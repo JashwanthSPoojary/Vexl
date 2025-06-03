@@ -34,7 +34,7 @@ export function LogsViewer({ buildId }: LogsViewerProps) {
   }, [logs]);
 
   return (
-    <div className="border rounded-lg bg-background">
+    <div className="max-w-5xl mx-auto space-y-6 pt-4 bg-background mt-4">
       <LogsHeader
         isConnected={isConnected}
         searchQuery={searchQuery}

@@ -31,6 +31,7 @@ export default function ProjectDashboard({workspace}:{workspace:string}) {
               onChange={setSearchTerm}
               placeholder="Search projects..."
               onCommandOpen={() => setCommandOpen(true)}
+              isLoading={loading}
             />
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
@@ -40,7 +41,7 @@ export default function ProjectDashboard({workspace}:{workspace:string}) {
               onChange={setSortOption}
               selectedSort={selectedSort}
               setSelectedSort={setSelectedSort}
-              className="flex-1 sm:flex-none"
+              className="flex-1 sm:flex-none !bg-background"
             />
             <AddNewButton
               className="flex-1 sm:flex-none"
@@ -49,7 +50,7 @@ export default function ProjectDashboard({workspace}:{workspace:string}) {
         </div>
       </div>
       {loading?<SkeletonProjectsCard/>:<ProjectsGrid projects={sortedProjects} workspace={workspace} />}
-      <CommandBox open={commandOpen} onOpenChange={setCommandOpen} onSelect={onProjectSelect} />
+      <CommandBox workspace={workspace} open={commandOpen} onOpenChange={setCommandOpen} onSelect={onProjectSelect} />
     </div>
   );
 }

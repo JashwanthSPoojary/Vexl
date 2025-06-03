@@ -1,34 +1,48 @@
+"use server";
+import { authOptions } from "@/lib/authoptions";
 import { Octokit } from "@octokit/rest";
+import { getServerSession } from "next-auth";
 
-export async function getAllRepos(access_token: string) {
+interface RepoFetchResult {
+  success: boolean;
+  message: string;
+  data: any[];
+}
+
+export async function getAllRepos(): Promise<RepoFetchResult> {
+  const session = await getServerSession(authOptions);
+  const access_token = session?.user.github_access_token;
+
+  if (!session || !access_token) {
+    return {
+      success: false,
+      message: "No session or access token",
+      data: [],
+    };
+  }
+
   const octokit = new Octokit({
     auth: access_token,
   });
 
-  let page = 1;
-  const perPage = 100;
-  let allRepos: any[] = [];
-  let hasNextPage = true;
-
   try {
-    while (hasNextPage) {
-      const { data, headers } = await octokit.repos.listForAuthenticatedUser({
-        visibility: "all",
-        sort: "updated",
-        per_page: perPage,
-        page,
-      });
+    const allRepos = await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+      visibility: "all",
+      sort: "updated",
+      per_page: 100,
+    });
 
-      allRepos = allRepos.concat(data);
-
-      const linkHeader = headers.link || "";
-      hasNextPage = linkHeader.includes('rel="next"');
-      page += 1;
-    }
-
-    return allRepos;
+    return {
+      success: true,
+      message: "Fetched all GitHub repos",
+      data: allRepos,
+    };
   } catch (error) {
     console.error("Error fetching repositories:", error);
-    return [];
+    return {
+      success: false,
+      message: "Internal Server Error",
+      data: [],
+    };
   }
 }

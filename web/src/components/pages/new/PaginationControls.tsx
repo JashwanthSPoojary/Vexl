@@ -16,7 +16,7 @@ export default function PaginationControls({
         variant="outline"
         disabled={page === 1}
         onClick={() => setPage((p) => p - 1)}
-        className="cursor-pointer"
+        className="cursor-pointer !bg-foreground text-background hover:text-background/60"
       >
         Previous
       </Button>
@@ -28,7 +28,7 @@ export default function PaginationControls({
         variant="outline"
         disabled={page===totalPages}
         onClick={() => setPage((p) => p + 1)}
-        className="cursor-pointer"
+        className="cursor-pointer !bg-foreground text-background hover:text-background/60"
       >
         Next
       </Button>

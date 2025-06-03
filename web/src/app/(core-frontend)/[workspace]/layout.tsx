@@ -19,9 +19,7 @@ export default async function RootLayout({
   });
   if (!user || user.githubUsername !== workspace) {
     return redirect("/login");
-  }
-  console.log(session.user.github_access_token);
-  
+  }  
   return (
     <DashboardLayout session={session}>
       {children}

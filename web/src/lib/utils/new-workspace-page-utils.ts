@@ -18,6 +18,7 @@ export function transformGitHubRepo(repo: any) {
     id: repo.id,
     name: repo.name,
     clone_url: repo.clone_url,
+    html_url: repo.html_url,
     description: repo.description ?? "No description",
     stars: repo.stargazers_count,
     forks: repo.forks_count,
@@ -27,8 +28,12 @@ export function transformGitHubRepo(repo: any) {
     language: repo.language ?? "Unknown",
     languageColor: languageColors[repo.language] || languageColors.default,
     owner: repo.owner.login,
+    repoOwner: repo.owner.login,
+    repoName: repo.name,
+    defaultBranch: repo.default_branch,
   };
 }
+
 export function sortRepos(repos: Repo[], sortBy: string): Repo[] {
   switch (sortBy) {
     case "stars":

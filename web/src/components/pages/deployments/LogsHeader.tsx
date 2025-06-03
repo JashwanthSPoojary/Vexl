@@ -20,7 +20,7 @@ export function LogsHeader({
   deployUrl,
 }: LogsHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4">
       {/* Left: Status + Info */}
       <div className="space-y-1">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -51,7 +51,7 @@ export function LogsHeader({
           placeholder="Search logs..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 pr-8 h-9"
+          className="pl-10 pr-8 h-9 !bg-background"
         />
         {searchQuery && (
           <Button

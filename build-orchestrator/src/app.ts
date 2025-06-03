@@ -5,10 +5,12 @@ import { logs_router } from './routes/logs';
 import helmet from 'helmet';
 import { redis } from './lib/redis-client';
 import cors from 'cors'
+import { webhook_router } from './routes/webhook';
 
 const app = express();
 
 app.use(cors());
+app.use('/api',webhook_router);
 app.use(express.json());
 app.use(helmet());
 

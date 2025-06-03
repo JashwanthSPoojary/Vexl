@@ -28,7 +28,7 @@ export default function RepositoryImportFilters({
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search repositories..."
-          className="pl-9 text-sm"
+          className="pl-9 text-sm !bg-background"
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -37,10 +37,10 @@ export default function RepositoryImportFilters({
       </div>
 
       <Select value={sortBy} onValueChange={setSortBy} >
-        <SelectTrigger className="w-40 cursor-pointer" >
+        <SelectTrigger className="w-40 cursor-pointer !bg-background" >
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="!bg-background">
           <SelectItem value="updated">Recently Updated</SelectItem>
           <SelectItem value="stars">Stars</SelectItem>
           <SelectItem value="forks">Forks</SelectItem>

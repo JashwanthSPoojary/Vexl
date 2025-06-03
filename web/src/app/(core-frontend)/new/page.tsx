@@ -1,9 +1,12 @@
+import { getAllRepos } from "@/actions/repos";
 import RepositoryImport from "@/components/pages/new/RepositoryImport";
-import { authOptions } from "@/lib/authoptions";
-import { getServerSession } from "next-auth";
-const Page = async () => {
-  const session = await getServerSession(authOptions);
-  const access_token = session?.user.github_access_token;
-  return <RepositoryImport access_token={access_token} />;
-};
-export default Page;
+import RepositorySkeletonList from "@/components/pages/new/RepositorySkeletonList";
+import { transformGitHubRepo } from "@/lib/utils/new-workspace-page-utils";
+import { Suspense } from "react";
+export default async function Page() {
+  const res = await getAllRepos();
+  const formattedRepos = res.success ? res.data.map(transformGitHubRepo) : [];
+  return <Suspense fallback={<RepositorySkeletonList />}>
+      <RepositoryImport initialRepos={formattedRepos} />
+    </Suspense>
+}
