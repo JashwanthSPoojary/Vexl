@@ -13,10 +13,15 @@ interface CommandBoxProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect?: (value: string) => void;
-  workspace:string
+  workspace: string;
 }
 
-export function CommandBox({ open, onOpenChange, onSelect,workspace }: CommandBoxProps) {
+export function CommandBox({
+  open,
+  onOpenChange,
+  onSelect,
+  workspace,
+}: CommandBoxProps) {
   const { initialProjects: projects } = useProjectSearch(workspace);
   const [search, setSearch] = useState("");
   const router = useRouter();
@@ -51,35 +56,37 @@ export function CommandBox({ open, onOpenChange, onSelect,workspace }: CommandBo
             <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
               No projects found.
             </Command.Empty>
-            <Command.Group heading="Projects">
-              {projects.map((project) => (
-                <Command.Item
-                  key={project.id}
-                  value={project.name}
-                  onSelect={() => {
-                    router.push(`/${workspace}/${project.name}`);
-                    onSelect?.(project.id);
-                    onOpenChange(false);
-                  }}
-                  className="flex items-center gap-2 rounded-sm px-4 py-2 text-sm cursor-pointer hover:bg-accent"
-                >
-                  <div
-                    className={cn(
-                      "flex h-6 w-6 items-center justify-center rounded-full text-xs text-white"
-                    )}
-                    style={{ background: project.iconBg }}
+            {projects.length > 0 && (
+              <Command.Group heading="Projects">
+                {projects.map((project) => (
+                  <Command.Item
+                    key={project.id}
+                    value={project.name}
+                    onSelect={() => {
+                      router.push(`/${workspace}/${project.name}`);
+                      onSelect?.(project.id);
+                      onOpenChange(false);
+                    }}
+                    className="flex items-center gap-2 rounded-sm px-4 py-2 text-sm cursor-pointer hover:bg-accent"
                   >
-                    {project.icon}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-foreground">{project.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {project.url}
-                    </span>
-                  </div>
-                </Command.Item>
-              ))}
-            </Command.Group>
+                    <div
+                      className={cn(
+                        "flex h-6 w-6 items-center justify-center rounded-full text-xs text-white"
+                      )}
+                      style={{ background: project.iconBg }}
+                    >
+                      {project.icon}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-foreground">{project.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {project.url}
+                      </span>
+                    </div>
+                  </Command.Item>
+                ))}
+              </Command.Group>
+            )}
           </Command.List>
         </Command>
       </DialogContent>

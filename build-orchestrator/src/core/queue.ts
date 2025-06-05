@@ -2,12 +2,10 @@ import { Queue, Worker } from "bullmq";
 import { redis } from "../lib/redis-client";
 import { BuildPayload } from "../types/types";
 import { WorkerManager } from "./worker-manager";
-import { PrismaClient } from "@prisma/client";
-
+import { db } from "../lib/prisma-client";
 export class BuildQueue {
   private queue: Queue;
   private worker: Worker;
-  private db = new PrismaClient();
   constructor() {
     this.queue = new Queue("builds", {
       connection: redis,
@@ -25,25 +23,17 @@ export class BuildQueue {
       { connection: redis, concurrency: 2 }
     );
     this.worker.on("failed", async (job, err) => {
-      await this.db.deployment.update({
+      await db.deployment.update({
         where: {
           buildId: job?.id,
         },
         data: {
-          status: "active",
+          status: "failed",
         },
       });
       console.error(`Job ${job?.id} failed:`, err);
     });
     this.worker.on("completed", async (job) => {
-      await this.db.deployment.update({
-        where: {
-          buildId: job?.id,
-        },
-        data: {
-          status: "active",
-        },
-      });
       console.log(`✅ Job ${job?.id} completed.`);
     });
   }

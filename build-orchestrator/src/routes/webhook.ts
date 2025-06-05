@@ -1,15 +1,15 @@
 import { Webhooks } from "@octokit/webhooks";
 import { raw, Request, Response, Router } from "express";
-import { PrismaClient } from "@prisma/client";
 import { BuildQueue } from "../core/queue";
 import { BuildPayload } from "../types/types";
 import { parseJsonToEnvRecord } from "../lib/utils";
+import { db } from "../lib/prisma-client";
+
 const webhooks = new Webhooks({
   secret: process.env.GITHUB_WEBHOOK_SECRET!,
 });
-const db = new PrismaClient();
-
 const queue = new BuildQueue();
+
 export async function handleWeebhook(req: Request, res: Response) {
   try {
     console.log("logging the webhook secret : ");
@@ -58,10 +58,16 @@ export async function handleWeebhook(req: Request, res: Response) {
     };
     console.log("build payload:");
     console.log(buildPayload);
-    const queued = await queue.addQueue(project.buildId, buildPayload);
+    await queue.addQueue(project.buildId, buildPayload);
     console.log("added to queue");
-    console.log(queued);
-    
+    await db.deployment.update({
+      where:{
+        buildId:project.buildId
+      },
+      data:{
+        status:"queued"
+      }
+    });
     res.status(200).json({ success: "Done the redeployment" });
   } catch (error) {
     console.error("Webhook error:", error);

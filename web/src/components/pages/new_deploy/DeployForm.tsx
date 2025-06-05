@@ -7,6 +7,7 @@ import EnvVarRow from "./EnvVarRow";
 import FormSection from "./FormSection";
 import { useEnvVars } from "@/hooks/use-env-vars";
 import { useDeployProject } from "@/hooks/use-deploy-project";
+import { deployFormSchema } from "@/lib/schemas/deploy-form";
 
 interface DeployFormProps {
   repo_url: string;
@@ -21,13 +22,35 @@ export default function DeployForm({
   default_branch,
 }: DeployFormProps) {
   const { envVars, handleEnvChange, addEnvVar, removeEnvVar } = useEnvVars();
-  const { name, setName, isDeploying, error, deploy } = useDeployProject({
+  const {
+    name,
+    setName,
+    isDeploying,
+    error,
+    deploy,
+    nameError,
+    envError,
+    setNameError,
+    setEnvError,
+  } = useDeployProject({
     repo_url,
     initial_name,
     repo_owner,
     default_branch,
   });
   const handleDeployClick = () => {
+    const result = deployFormSchema.safeParse({
+      name,
+      envVars,
+    });
+    if (!result.success) {
+      const errors = result.error.flatten();
+      setNameError(errors.fieldErrors.name?.[0] ?? null);
+      setEnvError(errors.fieldErrors.envVars?.[0] ?? null);
+      return;
+    }
+    setNameError(null);
+    setEnvError(null);
     deploy(envVars);
   };
   return (
@@ -49,6 +72,7 @@ export default function DeployForm({
           disabled={isDeploying}
           className="w-full sm:w-[28rem] max-w-full h-11 !bg-background"
         />
+        {nameError && <p className="text-sm text-red-500 mt-1">{nameError}</p>}
       </FormSection>
 
       <FormSection title="Environment Variables">
@@ -63,6 +87,7 @@ export default function DeployForm({
               disabled={isDeploying}
             />
           ))}
+          {envError && <p className="text-sm text-red-500 mt-1">{envError}</p>}
           <Button
             type="button"
             onClick={addEnvVar}

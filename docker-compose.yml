@@ -2,6 +2,8 @@ services:
   redis:
     image: redis
     container_name: redis-server
+    ports:
+    - "6379:6379"
   postgres:
     image: postgres
     container_name: postgres-db
@@ -37,6 +39,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - redis
+      - postgres
   proxy-server:
     build: ./proxy
     container_name: proxy
@@ -46,5 +49,7 @@ services:
       - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydb
     ports:
       - "3002:3002"
+    depends_on:
+      - postgres
 volumes:
   pgdata:

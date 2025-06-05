@@ -1,11 +1,11 @@
 {
   "name": "proxy",
   "version": "1.0.0",
-  "main": "proxy.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "tsc && node ./dist/proxy.js",
+    "dev": "tsc && node ./dist/index.js",
     "build": "tsc",
-    "start": "node ./dist/proxy.js"
+    "start": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^5.0.2",
+    "@types/http-proxy": "^1.17.16",
     "prisma": "^6.8.2",
     "typescript": "^5.8.3"
   },

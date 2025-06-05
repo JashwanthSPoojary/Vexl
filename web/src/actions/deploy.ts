@@ -23,6 +23,7 @@ export async function deployProject(
   ) {
     return { success: false, message: "Unauthorized or missing session." , data:{} };
   }
+  const url = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? "http://localhost:3001"
   const github_access_token = session.user.github_access_token;
   const workspaceSlug = session.user.github_username;
   const slug = generateSlug();
@@ -45,7 +46,7 @@ export async function deployProject(
       return { success: false, message:"Cant use Existing project name" ,data:{} };
     }
     const buill_call = await fetch(
-      `http://localhost:3001/api/builds/${build_id}`,
+      `${url}/api/builds/${build_id}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

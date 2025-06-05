@@ -17,8 +17,8 @@ export default function RepositoryImport({ initialRepos }: { initialRepos: Repo[
     setSearchQuery,
     sortBy,
     setSortBy,
-    refresh,
-    loading
+    loading,
+    refetch
   } = useRepos(initialRepos);
 
   return (
@@ -27,7 +27,7 @@ export default function RepositoryImport({ initialRepos }: { initialRepos: Repo[
         <div className="max-w-5xl mx-auto space-y-4">
           <div className="flex justify-between items-center">
             <RepositoryImportHeader />
-            <RepositoryRefreshButton onRefresh={refresh} />
+            <RepositoryRefreshButton onRefresh={refetch} />
           </div>
           <RepositoryImportFilters
             searchQuery={searchQuery}

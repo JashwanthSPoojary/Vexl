@@ -3,6 +3,8 @@ import { LucideGithub } from "lucide-react";
 import Link from "next/link";
 
 export default function DeploymentLinks({github_url,deploy_url}:{github_url:string,deploy_url:string|null}) {
+    const domain = process.env.NEXT_PUBLIC_DEPLOY_DOMAIN ?? "localhost:3002";
+  const url = `http://${deploy_url}.${domain}`;
   return (
 <div className="bg-background">
   <div className="px-4 sm:px-6 py-6">
@@ -18,7 +20,7 @@ export default function DeploymentLinks({github_url,deploy_url}:{github_url:stri
         </Button>
       </Link>
       {/* change this */}
-      <Link href={deploy_url?`http://${deploy_url}.localhost:3002`:""} target="_blank">
+      <Link href={url} target="_blank">
         <Button
           size="lg"
           className="gap-3 text-base px-6 py-3 cursor-pointer"

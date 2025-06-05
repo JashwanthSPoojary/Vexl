@@ -15,7 +15,7 @@ export default async function Page({
       workspaceSlug:workspace,
       projectName:project
     }
-  });
+  });    
   if(!data){
     // change this
     return <div>no data available</div>

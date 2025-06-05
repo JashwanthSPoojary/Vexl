@@ -1,5 +1,5 @@
 import { SettingsSkeleton } from "@/components/pages/project/SkeletonSettings";
-import Settings from "@/components/pages/settings/Settings";
+import ProjectSettings from "@/components/pages/settings/Settings";
 import { getProjectById } from "@/lib/helper/db";
 import { Suspense } from "react";
 
@@ -12,7 +12,7 @@ export default async function Page({params}:{params:Promise<{workspace:string,pr
     }
   return (
     <Suspense fallback={<SettingsSkeleton/>}>
-          <Settings project_data={project_data}/>
+          <ProjectSettings project_data={project_data}/>
     </Suspense>
   );
 }

@@ -1,50 +1,61 @@
-import express from "express";
-import dotenv from "dotenv";
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import { PrismaClient } from "@prisma/client";
-dotenv.config();
+import { handleCdnError, handleNotFound } from "./notFoundPage";
 
-const app = express();
-const db = new PrismaClient();
+interface ProxyOptions {
+  deployUrl: string;
+  cdnUrl: string;
+  fallbackHtml?: string;
+}
 
-app.use(async (req, res, next) => {
-  const hostname = req.hostname;
-  const subdomain = hostname.split(".")[0];
-  if (!subdomain || subdomain === "localhost") {
-    res.status(400).send("Invalid subdomain");
-    return;
-  }
-  try {
-    const data = await db.deployment.findFirst({
-      where: {
-        alternativeDeployUrl: subdomain,
-      },
-      select: {
-        deployUrl: true,
-      },
-    });
-    if (!data) {
-      res.status(400).send("no subdomain named available");
-      return;
-    }
-    const proxy = createProxyMiddleware({
-      target: process.env.CDN_URL,
-      changeOrigin: true,
-      pathRewrite: (path, req) => {
-        if (path === "/") {
-          return `/__outputs/${data.deployUrl}/index.html`;
+export function createStaticFileProxy({
+  deployUrl,
+  cdnUrl,
+  fallbackHtml,
+}: ProxyOptions) {
+  return createProxyMiddleware({
+    target: cdnUrl,
+    changeOrigin: true,
+    selfHandleResponse: true,
+    pathRewrite: (path) => {
+      if (path === "/") {
+        return `/__outputs/${deployUrl}/index.html`;
+      }
+      return `/__outputs/${deployUrl}/${path}`;
+    },
+    on: {
+      proxyRes: (proxyRes, req, res) => {
+        const expressReq = req as ExpressRequest;
+        const expressRes = res as ExpressResponse;
+
+        if (proxyRes.statusCode === 404) {
+          return handleNotFound(
+            expressReq,
+            expressRes,
+            deployUrl,
+            fallbackHtml
+          );
         }
-        return `/__outputs/${data.deployUrl}/${path}`;
-      },
-    });
-    return proxy(req, res, next);
-  } catch (error) {
-    console.log(error);
-    res.status(400).send("Internal server error");
-    return;
-  }
-});
 
-app.listen(process.env.PORT, () =>
-  console.log(`Proxy server running on ${process.env.PORT}`)
-);
+        if (proxyRes.statusCode! >= 400) {
+          let body = "";
+          proxyRes.on("data", (chunk) => (body += chunk));
+          proxyRes.on("end", () =>
+            handleCdnError(expressReq, expressRes, proxyRes.statusCode!, body)
+          );
+          return;
+        }
+
+        expressRes.status(proxyRes.statusCode!);
+        Object.entries(proxyRes.headers).forEach(([key, val]) => {
+          if (val) expressRes.setHeader(key, val as string);
+        });
+
+        proxyRes.pipe(expressRes);
+      },
+    },
+  });
+}

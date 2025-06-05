@@ -21,7 +21,7 @@ export const SidebarContent = ({ sections, activeSection, onChange }: Props) => 
                 key={section.id}
                 onClick={() => onChange(section.id)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors",
+                  "cursor-pointer w-full flex items-center gap-3 px-3 py-2 rounded-md text-left transition-colors",
                   activeSection === section.id
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent/50",

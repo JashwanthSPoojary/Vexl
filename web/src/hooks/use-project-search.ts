@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from "react"
-import { filterProjects, sortProjects } from "@/lib/utils/workspace-page-utils"
-import { useProjects } from "./use-projects"
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { filterProjects, sortProjects } from "@/lib/utils/workspace-page-utils";
+import { useProjects } from "./use-projects";
 import { SortKey } from "@/types/types";
 
 export function useProjectSearch(workspace: string) {
   const { projects: initialProjects, loading: initialLoading, error } = useProjects(workspace);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortAscending, setSortAscending] = useState(false);
@@ -15,6 +16,14 @@ export function useProjectSearch(workspace: string) {
   const [filteredProjects, setFilteredProjects] = useState(initialProjects);
 
   useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredProjects(initialProjects);
+    }
+  }, [initialProjects, searchTerm]);
+
+  useEffect(() => {
+    if (!searchTerm.trim()) return;
+
     setIsSearching(true);
     const timeout = setTimeout(() => {
       const result = filterProjects(initialProjects, searchTerm);
@@ -56,6 +65,6 @@ export function useProjectSearch(workspace: string) {
     loading: initialLoading || isSearching,
     error,
     selectedSort,
-    setSelectedSort
+    setSelectedSort,
   };
 }

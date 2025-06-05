@@ -1,12 +1,10 @@
 import Docker from "dockerode";
 import { BuildPayload } from "../types/types";
 import { config } from "../config";
-import { PrismaClient } from "@prisma/client";
-
+import { db } from "../lib/prisma-client";
 
 export class WorkerManager {
   private docker = new Docker();
-  private db = new PrismaClient();
   async spawnWorker(build_id: string, payload: BuildPayload) {
     try {
       console.log("Spawning build-worker with payload:", payload);
@@ -38,12 +36,24 @@ export class WorkerManager {
       await container.start();
       const waitResult = await container.wait();
       if (waitResult.StatusCode !== 0) {
-        console.log("Build failed");
-        await this.db.deployment.update({
-          where: { buildId: build_id },
-          data: { status: "failed" },
+        await db.deployment.update({
+          where:{
+            buildId:build_id
+          },
+          data:{
+            status:"failed"
+          }
         });
+        return;
       }
+      await db.deployment.update({
+          where:{
+            buildId:build_id
+          },
+          data:{
+            status:"active"
+          }
+      });
       console.log("build was success");
     } catch (error) {
       console.error("spawnWorker failed:", error);

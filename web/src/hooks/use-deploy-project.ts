@@ -17,6 +17,9 @@ export function useDeployProject({
   const [name, setName] = useState(initial_name);
   const [isDeploying, setIsDeploying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [envError, setEnvError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const deploy = async (envVars: { key: string; value: string }[]) => {
@@ -63,5 +66,9 @@ export function useDeployProject({
     isDeploying,
     error,
     deploy,
+    nameError,
+    setNameError,
+    envError,
+    setEnvError
   };
 }

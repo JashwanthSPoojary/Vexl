@@ -1,0 +1,11 @@
+services:
+  web:
+    build: ./web
+    container_name: web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.web
+    depends_on:
+     - postgres
+     - redis

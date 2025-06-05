@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
+import { tree } from "next/dist/build/templates/app-page";
 import { useState } from "react";
 
 interface Props {
-  onRefresh: () => Promise<void>;
+  onRefresh: (forceRefresh?: boolean) => Promise<void>;
 }
 
 export default function RepositoryRefreshButton({ onRefresh }: Props) {
@@ -14,7 +15,7 @@ export default function RepositoryRefreshButton({ onRefresh }: Props) {
   const handleRefresh = async () => {
     setLoading(true);
     try {
-      await onRefresh();
+      await onRefresh(true);
     } finally {
       setLoading(false);
     }

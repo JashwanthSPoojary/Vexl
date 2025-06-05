@@ -14,21 +14,28 @@ export function useRepos(initial: Repo[] = []) {
   const [loading, setLoading] = useState(initial.length === 0);
   const perPage = 3;
 
-  const refresh = async () => {
+  const fetchRepos = useCallback(async (forceRefresh = false) => {
     setLoading(true);
     try {
-      const res = await getAllRepos();
-      if (res.success) {
-        const formatted = res.data.map(transformGitHubRepo);
-        setRepos(formatted);
-        setPage(1);
+      const result = await getAllRepos(forceRefresh);
+      if (result.success) {
+        const transformed = result.data.map(transformGitHubRepo);
+        setRepos(transformed);
       }
-    } catch (err) {
-      console.error("Error refreshing repos:", err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (initial.length === 0) {
+      fetchRepos();
+    }
+  }, [fetchRepos, initial.length]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, sortBy]);
 
   const filteredRepos = useMemo(() => {
     const filtered = repos.filter(
@@ -44,20 +51,17 @@ export function useRepos(initial: Repo[] = []) {
     (page - 1) * perPage,
     page * perPage
   );
-  useEffect(() => {
-  setPage(1);
-}, [searchQuery, sortBy]);
 
   return {
-  repos: paginatedRepos,
-  totalPages,
-  currentPage: page,
-  setPage,
-  searchQuery,
-  setSearchQuery,
-  sortBy,
-  setSortBy,
-  loading,
-  refresh,
-};
+    repos: paginatedRepos,
+    totalPages,
+    currentPage: page,
+    setPage,
+    searchQuery,
+    setSearchQuery,
+    sortBy,
+    setSortBy,
+    loading,
+    refetch: fetchRepos,
+  };
 }

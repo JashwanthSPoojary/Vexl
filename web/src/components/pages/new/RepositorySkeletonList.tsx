@@ -7,7 +7,7 @@ export default function RepositorySkeletonList({
   setPage = () => {},
 }) {
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-6 mt-6">
       <div className="space-y-4 animate-pulse">
         <div className="h-8 w-48 bg-muted rounded" />
         <div className="h-4 w-64 bg-muted/60 rounded" />

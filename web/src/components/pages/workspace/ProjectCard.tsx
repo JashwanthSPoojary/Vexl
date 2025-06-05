@@ -17,6 +17,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, workspace }: ProjectCardProps) {
+  const domain = process.env.NEXT_PUBLIC_DEPLOY_DOMAIN ?? "localhost:3002";
+  const url = `http://${project.url}.${domain}`;
   const router = useRouter();
   const handleCardClick = () => {
     router.push(`/${workspace}/${project.name}`);
@@ -42,7 +44,7 @@ export function ProjectCard({ project, workspace }: ProjectCardProps) {
               {project.url ? (
                 //change this
                 <a
-                  href={`http://${project.url}.localhost:3002`}
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}

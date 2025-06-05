@@ -16,6 +16,8 @@ interface DeploymentInfoProps {
 }
 
 export function DeploymentInfo({ data }: { data: DeploymentInfoProps }) {
+  const domain = process.env.NEXT_PUBLIC_DEPLOY_DOMAIN ?? "localhost:3002";
+  const url = `http://${data.alternativeDeployUrl}.${domain}`;
   return (
     <div className="w-full lg:w-80 space-y-6 text-sm">
       <div>
@@ -25,10 +27,10 @@ export function DeploymentInfo({ data }: { data: DeploymentInfoProps }) {
             {data?.alternativeDeployUrl}
           </span>
           {/* change this */}
-          <Link target="_blank" href={`http://${data?.alternativeDeployUrl}.localhost:3002`}>
-          <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
-            <ExternalLink className="h-3 w-3" />
-          </Button>
+          <Link target="_blank" href={url}>
+            <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0">
+              <ExternalLink className="h-3 w-3" />
+            </Button>
           </Link>
         </div>
       </div>
@@ -45,21 +47,22 @@ export function DeploymentInfo({ data }: { data: DeploymentInfoProps }) {
         </div>
       </div>
 
-      {/* Status and Created */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
         <div>
           <h3 className="text-muted-foreground mb-2">Status</h3>
           <div className="flex items-center gap-2">
             {/* change this */}
             <div
-              className={`w-2 h-2 rounded-full ${
-                data.status === "active"
-                  ? "bg-green-600"
-                  : data.status === "queued"
-                  ? "bg-yellow-500"
-                  : "bg-red-600"
-              }`}
-            />
+  className={`w-2 h-2 rounded-full ${
+    data.status === "active"
+      ? "bg-green-600"
+      : data.status === "queued"
+      ? "bg-yellow-500"
+      : data.status === "failed"
+      ? "bg-red-600"
+      : "bg-gray-400"
+  }`}
+/>
             <span className="text-foreground">{data.status}</span>
           </div>
         </div>
