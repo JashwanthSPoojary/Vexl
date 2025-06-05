@@ -3,7 +3,7 @@ services:
     image: redis
     container_name: redis-server
     ports:
-    - "6379:6379"
+      - "6379:6379"
   postgres:
     image: postgres
     container_name: postgres-db
@@ -18,21 +18,14 @@ services:
   build-worker:
     build: ./build-worker
     container_name: build-worker
-    entrypoint: [ "true" ]
+    entrypoint: ["true"]
     depends_on:
       - redis
-    environment:
-      - REDIS_HOST=redis-server
-
   build-orchestrator:
     build: ./build-orchestrator
     container_name: build-orchestrator
-    environment:
-      - PORT=3001
-      - REDIS_HOST=redis-server
-      - BIND_PATH=C:/personal-projects/secrets
-      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
-      - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydb
+    env_file:
+      - .env.orchestrator
     ports:
       - "3001:3001"
     volumes:
@@ -43,10 +36,8 @@ services:
   proxy-server:
     build: ./proxy
     container_name: proxy
-    environment:
-      - PORT=3002
-      - CDN_URL=${CDN_URL}
-      - DATABASE_URL=postgresql://myuser:mypassword@postgres-db:5432/mydb
+    env_file:
+      - .env.proxy
     ports:
       - "3002:3002"
     depends_on:
