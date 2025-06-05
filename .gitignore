@@ -1,4 +1,7 @@
 .env
+.env.web
+.env.proxy
+.env.orchestator
 node_modules
 dist
 secrets
