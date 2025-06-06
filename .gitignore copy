@@ -1,6 +1,0 @@
-.env
-.env.*
-build-orchestrator/.env
-node_modules
-dist
-secrets

@@ -1,2 +1,1 @@
-1) deploy to vm without git actions 
-2) run the project workable
+1. deploy to vm without git actions

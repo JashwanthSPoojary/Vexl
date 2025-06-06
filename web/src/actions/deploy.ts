@@ -23,6 +23,9 @@ export async function deployProject(
   ) {
     return { success: false, message: "Unauthorized or missing session." , data:{} };
   }
+  // change this
+  console.log("the env of EXT_PUBLIC_ORCHESTRATOR_URL");
+  console.log(process.env.NEXT_PUBLIC_ORCHESTRATOR_URL);
   const url = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? "http://localhost:3001"
   const github_access_token = session.user.github_access_token;
   const workspaceSlug = session.user.github_username;
