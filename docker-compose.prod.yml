@@ -56,8 +56,6 @@ services:
   web:
     build:
       context: ./web
-      args:
-        - NEXT_PUBLIC_ORCHESTRATOR_URL=${NEXT_PUBLIC_ORCHESTRATOR_URL}
     image: web
     container_name: web
     ports:
@@ -69,6 +67,5 @@ services:
       - redis
       - build-orchestrator
       - proxy-server
-
 volumes:
   pgdata:

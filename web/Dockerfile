@@ -1,6 +1,7 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 ARG NEXT_PUBLIC_ORCHESTRATOR_URL
+ENV NEXT_PUBLIC_ORCHESTRATOR_URL=https://vexlapi.jashwanth.me
 COPY package*.json ./
 RUN npm ci
 COPY prisma ./prisma

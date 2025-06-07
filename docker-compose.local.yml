@@ -4,6 +4,7 @@ services:
     container_name: redis-server
     ports:
       - "6379:6379"
+
   postgres:
     image: postgres
     container_name: postgres-db
@@ -15,14 +16,20 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
   build-worker:
-    build: ./build-worker
+    build:
+      context: ./build-worker
+    image: build-worker
     container_name: build-worker
     entrypoint: ["true"]
     depends_on:
       - redis
+
   build-orchestrator:
-    build: ./build-orchestrator
+    build:
+      context: ./build-orchestrator
+    image: build-orchestrator
     container_name: build-orchestrator
     env_file:
       - .env.orchestrator
@@ -33,8 +40,11 @@ services:
     depends_on:
       - redis
       - postgres
+
   proxy-server:
-    build: ./proxy
+    build:
+      context: ./proxy
+    image: proxy
     container_name: proxy
     env_file:
       - .env.proxy
@@ -42,5 +52,20 @@ services:
       - "3002:3002"
     depends_on:
       - postgres
+
+  web:
+    build:
+      context: ./web
+    image: web
+    container_name: web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.web
+    depends_on:
+      - postgres
+      - redis
+      - build-orchestrator
+      - proxy-server
 volumes:
   pgdata:
