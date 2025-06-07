@@ -10,7 +10,7 @@ export function DeploymentPreview({ subdomain }: { subdomain: string | null }) {
         {/* change this */}
         <Link href={url} aria-label="View deployment preview" target="_blank">
           <Image
-            src="https://images.pexels.com/photos/281260/pexels-photo-281260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            src='/preview.webp'
             alt="Deployment preview"
             fill
             className="object-cover"
