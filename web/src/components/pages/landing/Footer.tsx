@@ -12,39 +12,37 @@ export default function Footer() {
         </div>
 
         <Link
-          href="/get-started"
+          href="/login"
           className="px-5 py-2 rounded-xl border border-current text-sm font-medium hover:opacity-80 transition"
         >
           Get Started
         </Link>
-
-        {/* Developer Info */}
         <div className="flex flex-col items-center md:items-end gap-1 text-sm">
-          <span className="font-medium">Built by Jaswanth S</span>
+          <span className="font-medium">Built by Jashwanth S</span>
           <div className="flex gap-4 mt-1 text-lg">
             <Link
-              href="https://x.com/yourhandle"
+              href="https://x.com/JashwantPoojary"
               target="_blank"
               aria-label="Twitter"
             >
               <Twitter />
             </Link>
             <Link
-              href="mailto:your@email.com"
+              href="mailto:jaswanthspoojary@gmail.com"
               target="_blank"
               aria-label="Email"
             >
               <Mail />
             </Link>
             <Link
-              href="https://yourportfolio.com"
+              href="https://jashwanth.me"
               target="_blank"
               aria-label="Portfolio"
             >
               <Globe />
             </Link>
             <Link
-              href="https://linkedin.com/in/yourhandle"
+              href="https://www.linkedin.com/in/jashwanth-s-poojary/"
               target="_blank"
               aria-label="LinkedIn"
             >

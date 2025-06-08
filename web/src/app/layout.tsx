@@ -12,6 +12,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Vexl",
   description: "React hosting platform",
+  icons:{
+    icon:"logo.webp"
+  }
 };
 
 export default function RootLayout({

@@ -31,7 +31,7 @@ export default function HeroSection() {
 
         {/* CTA Button */}
         <div className="flex justify-center sm:justify-start">
-          <Link href="/dashboard">
+          <Link href="/login">
             <RainbowButton>Deploy Your App</RainbowButton>
           </Link>
         </div>
