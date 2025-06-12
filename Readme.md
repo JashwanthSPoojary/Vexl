@@ -1,13 +1,13 @@
 # Vexl : React Hosting Platform
 
-Instantly host your React application while accessing the GitHub repo’s source, and get a custom subdomain—better than a Vercel domain.  
+Instantly host your React application with direct access to your GitHub repository’s source code, and receive a custom subdomain—superior to a generic Vercel domain.  
 For example: `yourname.vexl.live`
 
-I made this project to understand how Vercel works and how it deploys React applications. It was a challenging project, mostly due to the system design required for this kind of platform.
+I built this project as a way to explore how Vercel operates under the hood, especially how it deploys React applications. The most challenging part was architecting a scalable system to support this platform.
 
 ---
 
-## Start Up
+## Getting Started
 
 ```bash
 git clone https://github.com/JashwanthSPoojary/Vexl.git
@@ -17,7 +17,7 @@ docker-compose -f docker-compose.prod.yml up --build
 
 ---
 
-## Build Architecture
+## Architecture Overview
 
 <p align="center">
   <img src="./docs/build-architecture.png" alt="Build Architecture" width="600" />
@@ -28,19 +28,19 @@ docker-compose -f docker-compose.prod.yml up --build
 ## Services
 
 - **build-orchestrator**  
-  Orchestrates builds using BullMQ, Redis, and streams logs from Redis to the web via SSE.  
+  Coordinates builds using BullMQ and Redis, streaming logs in real time to the web interface via SSE.  
   _Tech: Node.js, Express.js, Redis, BullMQ, dockerode, Prisma_
 
 - **build-worker**  
-  Isolated environment spawned by build orchestrator to perform cloning, installing, building, and deploying.  
+  Runs in a sandboxed environment, performing tasks such as cloning, installing dependencies, building, and deploying.  
   _Tech: simple-git, ioredis, aws-sdk_
 
 - **proxy**  
-  Proxy server to serve hosted React sites.  
+  Acts as a gateway, serving hosted React sites.  
   _Tech: Prisma, Express, http-proxy-middleware_
 
 - **web**  
-  Next.js frontend to fetch all repos via GitHub OAuth.  
+  The Next.js frontend authenticates with GitHub OAuth, allowing users to browse their repositories.  
   _Tech: Octokit, Prisma, shadcn, framer-motion, next-auth, zod, next-themes, ioredis, axios_
 
 - **redis-server**
@@ -49,27 +49,27 @@ docker-compose -f docker-compose.prod.yml up --build
 
 ---
 
-## Challenges & Learnings During Building Vexl
+## Key Challenges & Learnings
 
 - **GitHub Integration:**  
-  Used the Octokit/rest library to fetch all user repos, with efficient API limit handling via caching. Filtering for React repos among all others was challenging and led me to learn more about NextAuth’s GitHub OAuth flow under the hood.
+  Leveraged Octokit/rest to fetch all user repositories, efficiently handling API rate limits with caching. Filtering for React repositories was trickier than expected and deepened my understanding of NextAuth’s GitHub OAuth flow.
 
-- **Webhooks for Redeployment:**  
-  Integrated GitHub webhooks to trigger redeployment on any source code change. Learned in-depth about GitHub Developer APIs.
+- **Webhooks for Automated Redeployment:**  
+  Integrated GitHub webhooks to trigger automatic redeployment on every code change. This required a deep dive into the GitHub Developer APIs.
 
 - **Real-Time Logs with Redis & SSE:**  
-  First time using Redis: implemented efficient, real-time logs to end users via SSE (Server-Sent Events). Learned why SSE is suited for log streaming from the build orchestrator to the Next.js frontend.
+  My first experience with Redis involved streaming live logs to users via SSE (Server-Sent Events). This taught me why SSE is ideal for log delivery from the build orchestrator to the Next.js frontend.
 
 - **Queueing with BullMQ:**  
-  Implemented BullMQ with Redis to handle concurrent deployments gracefully, ensuring the system doesn’t crash and can spawn Docker containers as needed.
+  Used BullMQ with Redis to manage concurrent deployments, ensuring stability and seamless spawning of Docker containers for builds.
 
 - **Isolated Build Worker:**  
-  Built a worker for tasks like git clone, dependency install, build, and deploy to DigitalOcean Spaces (an S3 wrapper). Learned to safely manage and flow user-provided environment files, securely prompt for system envs inside Docker, and much about Docker internals.
+  Developed a dedicated worker for git cloning, dependency installation, building, and deploying to DigitalOcean Spaces (an S3-compatible service). I learned how to securely handle user-supplied environment files, prompt for system variables within Docker, and gained a deeper understanding of Docker’s inner workings.
 
 - **Docker Compose & HTTPS:**  
-  Learned to efficiently start applications with Docker Compose and set up Let's Encrypt for HTTPS on every deployed project.
+  Gained hands-on experience efficiently managing multi-service applications with Docker Compose, and setting up automated HTTPS using Let’s Encrypt for every deployed project.
 
 - **Writing Better TypeScript:**  
-  Improved my code quality using class-based approaches in TypeScript.
+  Enhanced my codebase by adopting class-based patterns, leading to more robust and maintainable TypeScript.
 
 ---
