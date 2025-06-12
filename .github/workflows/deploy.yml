@@ -19,6 +19,8 @@ jobs:
           script: |
             set -e
             cd /root/Vexl
+            docker compose -f docker-compose.prod.yml down
             git pull
-            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d postgres redis
+            sleep 10
             docker compose -f docker-compose.prod.yml up -d --build
