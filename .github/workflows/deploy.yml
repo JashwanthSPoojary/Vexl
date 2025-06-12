@@ -1,20 +1,22 @@
 name: CI/CD pipeline
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps: 
-      - name: Deploy to vm
+      - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:
-          hosts: ${{ secrets.VM_IP }}
+          host: ${{ secrets.VM_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          scripts: |
+          script: |
             set -e
             cd /root/Vexl
             docker compose -f docker-compose.prod.yml down
