@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps: 
-      - name: Deploy to VM
+      - name: Deploy to vm
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.VM_IP }}
+          hosts: ${{ secrets.VM_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+          scripts: |
             set -e
             cd /root/Vexl
             docker compose -f docker-compose.prod.yml down
