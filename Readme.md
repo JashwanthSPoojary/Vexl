@@ -20,7 +20,7 @@ docker-compose -f docker-compose.prod.yml up --build
 ## Build Architecture
 
 <p align="center">
-  <img src="./docs/build-architecture.png" alt="Build Architecture" width="704" height="1919" />
+  <img src="./docs/build-architecture.png" alt="Build Architecture" width="600" />
 </p>
 
 ---
