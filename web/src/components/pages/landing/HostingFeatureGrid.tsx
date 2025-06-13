@@ -1,6 +1,6 @@
 "use client"
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
-import { Cloud, Lock, Globe, GitBranch, ServerCrash, Rocket } from "lucide-react";
+import { Cloud, Lock, GitBranch, ServerCrash, Rocket } from "lucide-react";
 
 export default function HostingFeatureGrid() {
   return (
