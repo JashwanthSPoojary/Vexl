@@ -56,6 +56,8 @@ services:
   web:
     build:
       context: ./web
+      args:
+        - DATABASE_URL=${DATABASE_URL}
     image: web
     container_name: web
     ports:

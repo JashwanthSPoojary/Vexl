@@ -9,6 +9,7 @@ I built this project as a way to explore how Vercel operates under the hood, esp
 
 ## Getting Started
 
+Take the reference of .env.example file
 ```bash
 git clone https://github.com/JashwanthSPoojary/Vexl.git
 cd Vexl

@@ -1,31 +1,34 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS base
 WORKDIR /app
-ARG NEXT_PUBLIC_ORCHESTRATOR_URL
-ARG NEXT_PUBLIC_DEPLOY_DOMAIN
 
-ENV NEXT_PUBLIC_ORCHESTRATOR_URL=https://vexlapi.jashwanth.me
-ENV NEXT_PUBLIC_DEPLOY_DOMAIN=vexl.live
+FROM base AS deps
 COPY package*.json ./
 RUN npm ci
+
+FROM base AS builder
+ARG DATABASE_URL
+ARG NEXT_PUBLIC_ORCHESTRATOR_URL
+ARG NEXT_PUBLIC_DEPLOY_DOMAIN
+ENV DATABASE_URL=$DATABASE_URL
+ENV NEXT_PUBLIC_ORCHESTRATOR_URL=https://vexlapi.jashwanth.me
+ENV NEXT_PUBLIC_DEPLOY_DOMAIN=vexl.live
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 COPY prisma ./prisma
 RUN npx prisma generate
-COPY . . 
 RUN npm run build
 
-FROM node:18-alpine AS runner
-WORKDIR /app
+FROM base AS runner
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 --ingroup nodejs nextjs
 ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY  --from=builder /app/.next ./.next
+COPY package.json ./
+COPY  --from=builder /app/.next/standalone ./
+COPY  --from=builder /app/.next/static ./.next/static
 COPY  --from=builder /app/public ./public
-COPY  --from=builder /app/prisma ./prisma
 
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
-
+USER nextjs
 EXPOSE 3000
-CMD [ "npm","start" ]
+CMD [ "node","server.js" ]
 
 
 

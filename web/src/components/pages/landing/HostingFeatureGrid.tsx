@@ -56,6 +56,5 @@ export default function HostingFeatureGrid() {
     className="lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4 bg-[var(--vexl-black)] text-[var(--vexl-white)] border border-[var(--vexl-white)]"
   />
 </BentoGrid>
-
   );
 }
