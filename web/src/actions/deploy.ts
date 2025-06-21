@@ -67,8 +67,7 @@ export async function deployProject(
         repo: repo_name,
       }
     );
-    const webhookUrl =
-      "https://48a8-152-58-240-170.ngrok-free.app/api/webhooks/github";
+    const webhookUrl = process.env.GITHUB_WEBHOOK_URL;
     const existingHook = existingHooks.find(
       (hook) => hook.config?.url === webhookUrl
     );
