@@ -12,8 +12,6 @@ const queue = new BuildQueue();
 
 export async function handleWeebhook(req: Request, res: Response) {
   try {
-    console.log("logging the webhook secret : ");
-    console.log(process.env.GITHUB_WEBHOOK_SECRET);
     const signature = req.headers["x-hub-signature-256"];
     if (!signature || typeof signature !== "string") {
       console.log("not gonna make it");
@@ -28,8 +26,6 @@ export async function handleWeebhook(req: Request, res: Response) {
       return;
     }
     const event = JSON.parse(body);
-    console.log("envent is :");
-    console.log(event);
     if (!event.repository.name || !event.repository.owner.login) {
       console.log("no webhook repo name and owner");
       res.status(401).json({ error: "no webhook repo name and owner" });
@@ -41,23 +37,17 @@ export async function handleWeebhook(req: Request, res: Response) {
         repoOwner: event.repository.owner.login,
       },
     });
-    console.log("project db : ");
-    console.log(project);
     if (!project) {
       console.log("no project from db");
       res.status(401).json({ error: "Project not found" });
       return;
     }
     const envs = parseJsonToEnvRecord(project.envs);
-    console.log("envs:");
-    console.log(envs);
     const buildPayload: BuildPayload = {
-      project_id: project.projectName,
+      project_id: project.deployUrl,
       repo_url: project.repoUrl,
       envs:envs??'{}'
     };
-    console.log("build payload:");
-    console.log(buildPayload);
     await queue.addQueue(project.buildId, buildPayload);
     console.log("added to queue");
     await db.deployment.update({
