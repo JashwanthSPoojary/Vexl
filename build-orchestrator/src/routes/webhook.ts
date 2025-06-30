@@ -47,6 +47,10 @@ export async function handleWeebhook(req: Request, res: Response) {
       repo_url: project.repoUrl,
       envs:envs??'{}'
     };
+    console.log("build payload is : ");
+    console.log(buildPayload);
+    console.log("build id is: ",project.build_id);
+    
     await buildQueue.add("build", buildPayload, { jobId: project.buildId });
     console.log("added to queue");
     await db.deployment.update({
