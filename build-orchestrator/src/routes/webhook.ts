@@ -49,7 +49,7 @@ export async function handleWeebhook(req: Request, res: Response) {
     };
     console.log("build payload is : ");
     console.log(buildPayload);
-    console.log("build id is: ",project.build_id);
+    console.log("build id is: ",project.buildId);
     
     await buildQueue.add("build", buildPayload, { jobId: project.buildId });
     console.log("added to queue");
