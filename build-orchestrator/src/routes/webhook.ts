@@ -1,6 +1,6 @@
 import { Webhooks } from "@octokit/webhooks";
 import { raw, Request, Response, Router } from "express";
-import { BuildQueue } from "../core/queue";
+import { buildQueue } from "../core/queue"; // ✅ Use shared queue
 import { BuildPayload } from "../types/types";
 import { parseJsonToEnvRecord } from "../lib/utils";
 import { db } from "../lib/prisma-client";
@@ -8,7 +8,6 @@ import { db } from "../lib/prisma-client";
 const webhooks = new Webhooks({
   secret: process.env.GITHUB_WEBHOOK_SECRET!,
 });
-const queue = new BuildQueue();
 
 export async function handleWeebhook(req: Request, res: Response) {
   try {
@@ -48,7 +47,7 @@ export async function handleWeebhook(req: Request, res: Response) {
       repo_url: project.repoUrl,
       envs:envs??'{}'
     };
-    await queue.addQueue(project.buildId, buildPayload);
+    await buildQueue.add("build", buildPayload, { jobId: project.buildId });
     console.log("added to queue");
     await db.deployment.update({
       where:{

@@ -1,13 +1,12 @@
 import { Request, Response, Router } from "express";
 import { validateBuildPayload } from "../middleware/validation";
-import { BuildQueue } from "../core/queue";
+import { buildQueue } from "../core/queue";
 
-const queue = new BuildQueue();
 
 export async function handleBuild(req: Request, res: Response) {
   const build_id = req.params.build;
   try {
-    await queue.addQueue(build_id, { ...req.body });
+    await buildQueue.add("build", { ...req.body }, { jobId: build_id });
     res.status(202).json({
       build_id,
       statusUrl: `/builds/${build_id}/status`,
