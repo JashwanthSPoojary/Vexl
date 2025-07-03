@@ -56,12 +56,13 @@ services:
       - postgres
     restart: unless-stopped
 
-
   web:
     build:
       context: ./web
       args:
         - DATABASE_URL=${DATABASE_URL}
+        - NEXT_PUBLIC_ORCHESTRATOR_URL=${NEXT_PUBLIC_ORCHESTRATOR_URL}
+        - NEXT_PUBLIC_DEPLOY_DOMAIN=${NEXT_PUBLIC_DEPLOY_DOMAIN}
     image: web
     container_name: web
     ports:
@@ -70,6 +71,8 @@ services:
       - .env.web
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - NEXT_PUBLIC_ORCHESTRATOR_URL=${NEXT_PUBLIC_ORCHESTRATOR_URL}
+      - NEXT_PUBLIC_DEPLOY_DOMAIN=${NEXT_PUBLIC_DEPLOY_DOMAIN}
     depends_on:
       - postgres
       - redis

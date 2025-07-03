@@ -16,6 +16,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
 
   build-worker:
     build:
@@ -40,7 +41,7 @@ services:
     depends_on:
       - redis
       - postgres
-
+    restart: unless-stopped
   proxy-server:
     build:
       context: ./proxy
@@ -52,12 +53,15 @@ services:
       - "3002:3002"
     depends_on:
       - postgres
+    restart: unless-stopped
 
   web:
     build:
       context: ./web
       args:
         - DATABASE_URL=${DATABASE_URL}
+        - NEXT_PUBLIC_ORCHESTRATOR_URL=${NEXT_PUBLIC_ORCHESTRATOR_URL}
+        - NEXT_PUBLIC_DEPLOY_DOMAIN=${NEXT_PUBLIC_DEPLOY_DOMAIN}
     image: web
     container_name: web
     ports:
@@ -66,10 +70,14 @@ services:
       - .env.web
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - NEXT_PUBLIC_ORCHESTRATOR_URL=${NEXT_PUBLIC_ORCHESTRATOR_URL}
+      - NEXT_PUBLIC_DEPLOY_DOMAIN=${NEXT_PUBLIC_DEPLOY_DOMAIN}
     depends_on:
       - postgres
       - redis
       - build-orchestrator
       - proxy-server
+    restart: unless-stopped
+
 volumes:
   pgdata:

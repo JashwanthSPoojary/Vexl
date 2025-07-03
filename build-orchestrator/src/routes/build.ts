@@ -6,7 +6,7 @@ import { buildQueue } from "../core/queue";
 export async function handleBuild(req: Request, res: Response) {
   const build_id = req.params.build;
   try {
-    await buildQueue.add("build", { ...req.body }, { jobId: build_id });
+    await buildQueue.add("build", { ...req.body }, { jobId: build_id });    
     res.status(202).json({
       build_id,
       statusUrl: `/builds/${build_id}/status`,
