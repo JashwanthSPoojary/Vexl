@@ -9,7 +9,7 @@ export class UploadService {
   constructor() {
     this.s3 = new S3Client({
       endpoint: process.env.DIGITALOCEAN_SPACES_URL!.trim(),
-      region:'blr1',
+      region: "blr1",
       credentials: {
         accessKeyId: process.env.DIGITALOCEAN_SPACES_ACCESS_ID!.trim(),
         secretAccessKey: process.env.DIGITALOCEAN_SPACES_SECRET_KEY!.trim(),
@@ -25,10 +25,12 @@ export class UploadService {
     );
     try {
       const files = await this.getFiles(build_dir);
-      await Promise.all(files.map(file => 
-        this.uploadFile(build_dir, file, project_id, logger)
-      ));
-      logger.log('Deployment completed');
+      await Promise.all(
+        files.map((file) =>
+          this.uploadFile(build_dir, file, project_id, logger)
+        )
+      );
+      logger.log("Deployment completed");
     } catch (error) {
       logger.error(`Spaces upload failed: ${error}`);
       throw error;
@@ -52,13 +54,17 @@ export class UploadService {
   ) {
     const relativePath = path.relative(base_dir, file_path);
     const key = `__outputs/${project_id}/${relativePath.replace(/\\/g, "/")}`;
+    const isHTML = path.basename(file_path) === "index.html";
     logger.log(`Uploading: ${key}`);
     const data = new PutObjectCommand({
       Bucket: process.env.DIGITALOCEAN_SPACES_BUCKET_NAME!.trim(),
       Key: key,
       Body: fs.createReadStream(file_path),
-      ContentType: mime.lookup(file_path) || 'application/octet-stream',
+      ContentType: mime.lookup(file_path) || "application/octet-stream",
       ACL: "public-read",
+      CacheControl: isHTML
+        ? "no-cache, no-store, must-revalidate" // forces re-fetch of HTML
+        : "max-age=31536000, immutable",
     });
     await this.s3.send(data);
   }

@@ -1,8 +1,7 @@
 import { useState } from "react";
 
-export function useEnvVars(initialEnvVars = [{ key: "", value: "" }]) {
-  const [envVars, setEnvVars] = useState(initialEnvVars);
-
+export function useEnvVars() {
+  const [envVars, setEnvVars] = useState<{ key: string; value: string }[]>([]);
   const handleEnvChange = (
     index: number,
     field: "key" | "value",
